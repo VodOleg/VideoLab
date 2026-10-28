@@ -1,0 +1,13 @@
+# The review page: serves out/ (renders, scene clips, voice previews, posting kits) to any device on your network,
+# e.g. a phone: http://localhost:8796 here, or http://<this machine's address>:8796. Start with: docker compose up -d
+services:
+  videos:
+    image: nginx:alpine
+    container_name: videolab-videos
+    ports:
+      - "8796:80"
+    volumes:
+      - ./out:/srv/videos:ro
+      - ./serve/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./serve/index.html:/srv/site/index.html:ro
+    restart: unless-stopped

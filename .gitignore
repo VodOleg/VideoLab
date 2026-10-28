@@ -1,0 +1,8 @@
+node_modules/
+out/
+projects/*/build/
+.cache/
+.env
+CLAUDE.local.md
+music/*
+!music/.gitkeep

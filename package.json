@@ -1,0 +1,35 @@
+{
+  "name": "videolab",
+  "version": "1.0.0",
+  "description": "Make videos from a prompt: an AI agent writes a script; the stack voices, times, animates and renders it, locally and with free tools.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "kit": "node src/kit.ts",
+    "loop": "node src/loop.ts",
+    "music": "node src/music.ts",
+    "render": "node src/render.ts",
+    "still": "node src/engine/cli.ts still",
+    "studio": "node src/engine/studio.ts",
+    "typecheck": "tsc --noEmit",
+    "voice": "node src/voice.ts",
+    "voicelab": "node src/voicelab.ts"
+  },
+  "dependencies": {
+    "@fontsource/montserrat": "^5.3.0",
+    "@huggingface/transformers": "^3.8.1",
+    "esbuild": "^0.28.2",
+    "ffmpeg-static": "^5.3.0",
+    "kokoro-js": "^1.2.1",
+    "phonemizer": "1.2.1",
+    "playwright": "^1.64.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2"
+  }
+}

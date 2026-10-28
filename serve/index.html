@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VideoLab</title>
+  <style>
+    :root { color-scheme: dark; --bg: #111216; --card: #1c1d23; --field: #26272f; --line: #262731; --muted: #9a9cab; --accent: #ffd84d; --orange: #d4793c; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: #f2f2f5; font: 15px/1.4 system-ui, sans-serif; }
+    header { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 12px 16px 0; border-bottom: 1px solid var(--line); }
+    h1 { font-size: 18px; margin: 0 0 10px; }
+    nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+    nav::-webkit-scrollbar { display: none; }
+    nav button { flex: none; padding: 8px 13px; border-radius: 999px; border: 0; background: var(--field); color: var(--muted); font: 600 14px system-ui, sans-serif; cursor: pointer; }
+    nav button[aria-selected="true"] { background: var(--accent); color: #111; }
+    nav .badge { margin-left: 6px; font-weight: 400; opacity: .75; }
+    main { padding: 16px; max-width: 1140px; }
+    h2 { font-size: 17px; margin: 0 0 4px; }
+    h3 { font-size: 15px; margin: 22px 0 8px; color: var(--muted); }
+    .list { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+    .stack { display: grid; gap: 16px; }
+    .item { background: var(--card); border-radius: 12px; padding: 12px; }
+    .name { font-weight: 600; word-break: break-word; }
+    .meta { color: var(--muted); font-size: 13px; margin: 2px 0 10px; }
+    .meta a { color: var(--accent); }
+    .hint { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+    .empty { color: var(--muted); }
+    video { width: 100%; max-height: 75vh; border-radius: 8px; background: #000; display: block; }
+    audio { width: 100%; display: block; }
+    .num { color: var(--accent); margin-right: 6px; }
+    .note { font-size: 14px; margin: 0 0 4px; }
+    .recipe { color: var(--muted); font-size: 12px; margin: 0 0 8px; word-break: break-word; }
+    .line { background: var(--field); border-radius: 8px; padding: 10px; font-size: 15px; margin: 6px 0 10px; }
+    .callout { background: var(--card); border-left: 3px solid var(--accent); border-radius: 8px; padding: 10px 12px; margin: 0 0 14px; font-size: 14px; }
+
+    /* Posting kits */
+    .kit { background: var(--card); border-radius: 14px; padding: 14px; display: grid; gap: 14px; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); }
+    @media (max-width: 720px) { .kit { grid-template-columns: minmax(0, 1fr); } }
+    .kit h3 { margin: 0 0 4px; font-size: 18px; color: #f2f2f5; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 9px; border: 0; background: var(--orange); color: #fff; font: 600 14px system-ui, sans-serif; text-decoration: none; cursor: pointer; }
+    .btn.secondary { background: var(--field); color: #f2f2f5; }
+    .tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+    .tab { flex: 1; padding: 9px 6px; border-radius: 9px; border: 0; background: var(--field); color: var(--muted); font: 600 14px system-ui, sans-serif; cursor: pointer; }
+    .tab[aria-selected="true"] { background: var(--accent); color: #111; }
+    .field { margin-bottom: 12px; }
+    .field-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+    .label { font-weight: 600; font-size: 14px; }
+    .count { color: var(--muted); font-size: 12px; margin-left: 6px; font-weight: 400; }
+    .text { white-space: pre-wrap; word-break: break-word; background: var(--field); border-radius: 8px; padding: 10px; font-size: 14px; max-height: 260px; overflow: auto; user-select: text; -webkit-user-select: text; }
+    .copy { padding: 6px 12px; font-size: 13px; }
+    .copy.done { background: #3a8f5a; }
+    details.kit-fold { background: var(--card); border-radius: 14px; }
+    details.kit-fold > summary { padding: 14px; cursor: pointer; font-weight: 600; list-style: none; }
+    details.kit-fold > summary::-webkit-details-marker { display: none; }
+    details.kit-fold > summary .meta { margin: 2px 0 0; font-weight: 400; }
+    details.kit-fold[open] > summary { padding-bottom: 0; }
+    details.kit-fold > .kit { background: none; }
+    details.kit-fold .kit h3 { display: none; } /* the summary already names it */
+  </style>
+</head>
+<body>
+  <header>
+    <h1>VideoLab</h1>
+    <nav id="nav" role="tablist"></nav>
+  </header>
+  <main>
+    <section id="review" hidden></section>
+    <section id="post" hidden></section>
+    <section id="published" hidden></section>
+    <section id="voicelab" hidden></section>
+    <section id="files" hidden></section>
+  </main>
+  <script>
+    const size = b => b > 1e6 ? (b / 1e6).toFixed(1) + ' MB' : Math.round(b / 1e3) + ' KB';
+    const when = d => new Date(d).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    // mtime in the URL so a re-render isn't served from the browser cache
+    const url = (f, dir = '') => '/videos/' + dir + encodeURIComponent(f.name) + '?v=' + Date.parse(f.mtime);
+    const el = (tag, attrs = {}, ...children) => {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)) k === 'class' ? (e.className = v) : e.setAttribute(k, v);
+      e.append(...children.filter(c => c != null));
+      return e;
+    };
+    const getJson = async path => { const r = await fetch(path, { cache: 'no-store' }); return r.ok ? r.json() : null; };
+
+    /** An audio player; a phone's player sometimes gives up after its first range probe, so it reloads once on error. */
+    function player(src) {
+      const audio = el('audio', { controls: '', preload: 'none', src });
+      let retried = false;
+      audio.addEventListener('error', () => {
+        if (retried) return;
+        retried = true;
+        audio.src = src + '&retry=' + Date.now();
+        audio.load();
+      });
+      return audio;
+    }
+
+    // The page is plain http (Tailscale / Wi-Fi), where navigator.clipboard is unavailable: fall back to execCommand.
+    async function copy(text) {
+      try { await navigator.clipboard.writeText(text); return true; } catch {}
+      const ta = el('textarea');
+      ta.value = text;
+      Object.assign(ta.style, { position: 'fixed', top: '0', left: '0', opacity: '0' });
+      document.body.append(ta);
+      ta.focus(); ta.select(); ta.setSelectionRange(0, text.length);
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch {}
+      ta.remove();
+      return ok;
+    }
+
+    function field(label, text) {
+      const button = el('button', { class: 'btn copy', type: 'button' }, 'Copy');
+      const box = el('div', { class: 'text' }, text);
+      button.onclick = async () => {
+        if (await copy(text)) {
+          button.textContent = 'Copied ✓'; button.classList.add('done');
+          setTimeout(() => { button.textContent = 'Copy'; button.classList.remove('done'); }, 1500);
+        } else {
+          // Last resort: select the text so it can be copied by hand.
+          const range = document.createRange(); range.selectNodeContents(box);
+          getSelection().removeAllRanges(); getSelection().addRange(range);
+          button.textContent = 'Selected: copy it';
+        }
+      };
+      return el('div', { class: 'field' },
+        el('div', { class: 'field-head' }, el('span', { class: 'label' }, label, el('span', { class: 'count' }, text.length + ' chars')), button),
+        box);
+    }
+
+    const PLATFORMS = [
+      { id: 'youtube', name: 'YouTube', hint: 'YouTube: Create › Upload video (a vertical video up to 3 minutes becomes a Short). Tags: in YouTube Studio, under Show more.',
+        fields: k => [['Title', k.youtube.title], ['Description', k.youtube.description], ['Tags', k.youtube.tags.join(', ')]] },
+      { id: 'instagram', name: 'Instagram', hint: 'Instagram: + › Reel › pick the video › Edit cover › Add from camera roll (the cover image).',
+        fields: k => [['Caption', k.instagram.caption]] },
+      { id: 'tiktok', name: 'TikTok', hint: 'TikTok: + › Upload › pick the video › Edit cover if you like.',
+        fields: k => [['Caption', k.tiktok.caption]] },
+    ];
+
+    function kitCard(kit, files) {
+      const file = name => files.find(f => f.name === name);
+      const video = file(kit.video), preview = file(kit.preview) ?? video, cover = file(kit.cover);
+      const title = kit.title ?? kit.project.replace(/-/g, ' ');
+      // With a cover as poster, no #t= seek: the seeked frame would replace the poster.
+      const clip = el('video', cover
+        ? { controls: '', playsinline: '', preload: 'metadata', src: url(preview), poster: url(cover) }
+        : { controls: '', playsinline: '', preload: 'metadata', src: url(preview) + '#t=0.1' });
+      const meta = el('div', { class: 'meta' }, video ? `Rendered ${when(video.mtime)}` : 'Video missing: run npm run render');
+      // The length tells takes apart (e.g. a re-render after a script change).
+      clip.addEventListener('loadedmetadata', () => meta.prepend(`${clip.duration.toFixed(1)}s · `), { once: true });
+      const buttons = el('div', { class: 'buttons' });
+      if (video) buttons.append(el('a', { class: 'btn', href: url(video), download: video.name }, `Download video (${size(video.size)})`));
+      if (cover) buttons.append(el('a', { class: 'btn secondary', href: url(cover), download: cover.name }, 'Download cover'));
+
+      const panel = el('div');
+      const tabs = el('div', { class: 'tabs', role: 'tablist' });
+      const show = p => {
+        for (const t of tabs.children) t.setAttribute('aria-selected', String(t.dataset.id === p.id));
+        panel.replaceChildren(el('p', { class: 'hint' }, p.hint), ...p.fields(kit).map(([l, t]) => field(l, t)));
+      };
+      for (const p of PLATFORMS.filter(p => kit[p.id])) {
+        const t = el('button', { class: 'tab', role: 'tab', type: 'button' }, p.name);
+        t.dataset.id = p.id;
+        t.onclick = () => show(p);
+        tabs.append(t);
+      }
+      const first = PLATFORMS.find(p => kit[p.id]);
+      if (first) show(first);
+      return el('div', { class: 'kit' },
+        el('div', {}, el('h3', {}, title), meta, clip, buttons),
+        el('div', {}, tabs, panel));
+    }
+
+    // Each section fills itself and returns how many things it shows and when the newest was made (to pick the opening tab).
+    const SECTIONS = {
+      /**
+       * New cuts (renders without a posting kit yet), the scenes the last `npm run render -- <name> --scenes` re-rendered
+       * (out/scenes/), then narration previews from the last `npm run voice -- <name> --only ...` (out/previews/).
+       */
+      async review(files) {
+        const box = document.getElementById('review');
+        const cuts = files.filter(f => f.name.endsWith('.preview.mp4') && !files.some(k => k.name === f.name.replace('.preview.mp4', '.kit.json')));
+        for (const f of cuts) {
+          const clip = el('video', { controls: '', playsinline: '', preload: 'metadata', src: url(f) + '#t=0.1' });
+          const meta = el('div', { class: 'meta' }, `Rendered ${when(f.mtime)}`);
+          clip.addEventListener('loadedmetadata', () => meta.prepend(`${clip.duration.toFixed(1)}s · `), { once: true });
+          box.append(el('h2', {}, 'New cut'), el('div', { class: 'name' }, f.name.replace('.preview.mp4', '')), meta,
+            el('div', { class: 'list' }, el('div', {}, clip)), el('div', { style: 'height: 22px' }));
+        }
+        let newest = Math.max(0, ...cuts.map(f => Date.parse(f.mtime)));
+        let count = cuts.length;
+
+        const scenes = await getJson('/videos/scenes/scenes.json');
+        if (scenes) {
+          const redone = scenes.scenes.filter(s => s.file), kept = scenes.scenes.filter(s => !s.file);
+          const v = Date.parse(scenes.createdAt);
+          box.append(el('h2', {}, 'Re-rendered scenes'),
+            el('div', { class: 'meta' }, `${scenes.video} · ${when(scenes.createdAt)} · ${redone.length} re-rendered, ${kept.length} unchanged`));
+          const list = el('div', { class: 'list' });
+          for (const s of redone) {
+            list.append(el('div', { class: 'item' },
+              el('div', { class: 'name' }, s.id, el('span', { class: 'count' }, `${s.seconds}s`)),
+              s.text ? el('div', { class: 'line' }, s.text) : null,
+              el('video', { controls: '', playsinline: '', preload: 'metadata', src: '/videos/scenes/' + encodeURIComponent(s.file) + '?v=' + v + '#t=0.1' })));
+          }
+          box.append(list);
+          if (kept.length) box.append(el('div', { class: 'meta', style: 'margin-top: 10px' }, `Unchanged: ${kept.map(s => s.id).join(', ')}`));
+          box.append(el('div', { style: 'height: 22px' }));
+          count += redone.length;
+          newest = Math.max(newest, v);
+        }
+
+        const run = await getJson('/videos/previews/previews.json');
+        if (!run) {
+          if (!count) box.append(el('p', { class: 'empty' }, 'Nothing to review right now.'));
+          return { count, newest };
+        }
+        box.append(
+          el('h2', {}, 'Narration preview'),
+          el('div', { class: 'meta' }, `${run.project} · ${when(run.createdAt)} · voice ${run.voice}`),
+          run.note ? el('div', { class: 'callout' }, run.note) : null);
+        const list = el('div', { class: 'list' });
+        for (const b of run.beats) {
+          list.append(el('div', { class: 'item' },
+            el('div', { class: 'name' }, b.id, el('span', { class: 'count' }, `${b.seconds}s`)),
+            el('div', { class: 'line' }, b.text),
+            player('/videos/previews/' + encodeURIComponent(b.file) + '?v=' + Date.parse(run.createdAt))));
+        }
+        box.append(list);
+        return { count: count + run.beats.length, newest: Math.max(newest, Date.parse(run.createdAt)) };
+      },
+
+      /** Posting kits (npm run kit): To post, or Published once projects/<name>/kit.json has a "published" date. */
+      async kits(files) {
+        const kits = [];
+        for (const f of files.filter(f => f.name.endsWith('.kit.json'))) {
+          const kit = await getJson(url(f)).catch(() => null);
+          if (kit) kits.push(kit);
+        }
+        const mtime = kit => Date.parse(files.find(f => f.name === kit.video)?.mtime ?? 0);
+        const toPost = kits.filter(k => !k.published), done = kits.filter(k => k.published).sort((a, b) => b.published.localeCompare(a.published));
+
+        const post = document.getElementById('post');
+        if (toPost.length) post.append(el('div', { class: 'stack' }, ...toPost.map(k => kitCard(k, files))));
+        else post.append(el('p', { class: 'empty' }, 'Nothing waiting to be posted.'));
+
+        // Published kits stay folded: open one to grab its text again.
+        const pub = document.getElementById('published');
+        if (done.length) pub.append(el('div', { class: 'stack' }, ...done.map(k => {
+          const fold = el('details', { class: 'kit-fold' },
+            el('summary', {}, k.title ?? k.project, el('div', { class: 'meta' }, `Published ${k.published}`)));
+          fold.addEventListener('toggle', () => { if (fold.open && fold.children.length === 1) fold.append(kitCard(k, files)); });
+          return fold;
+        })));
+        else pub.append(el('p', { class: 'empty' }, 'Nothing published yet.'));
+
+        return {
+          post: { count: toPost.length, newest: Math.max(0, ...toPost.map(mtime)) },
+          published: { count: done.length, newest: 0 },
+        };
+      },
+
+      /** Voice lab (npm run voicelab): the same lines in several Kokoro voice mixes. */
+      async voicelab() {
+        const box = document.getElementById('voicelab');
+        const lab = await getJson('/videos/voice-lab/samples.json');
+        if (!lab) { box.append(el('p', { class: 'empty' }, 'No voice lab samples.')); return { count: 0, newest: 0 }; }
+        box.append(
+          el('h2', {}, 'Voice lab'),
+          el('p', { class: 'hint' }, `${lab.samples.length} voices saying the same lines (${lab.project}, speed ${lab.speed}), all at the same loudness. Tell Claude the numbers you like.`),
+          el('div', { class: 'line' }, lab.text));
+        let list;
+        for (const s of lab.samples) {
+          if (!list || list.dataset.group !== s.group) {
+            box.append(el('h3', {}, s.group), list = el('div', { class: 'list' }));
+            list.dataset.group = s.group;
+          }
+          const src = '/videos/voice-lab/' + encodeURIComponent(s.file) + '?v=' + Date.parse(lab.createdAt);
+          list.append(el('div', { class: 'item' },
+            el('div', { class: 'name' }, el('span', { class: 'num' }, '#' + s.n), s.label),
+            el('div', { class: 'meta' }, `~${s.pitchHz} Hz · ${s.seconds}s · `, el('a', { href: src, target: '_blank' }, 'open')),
+            el('p', { class: 'note' }, s.note),
+            el('p', { class: 'recipe' }, s.recipe),
+            player(src)));
+        }
+        return { count: lab.samples.length, newest: Date.parse(lab.createdAt) };
+      },
+
+      /** Everything in out/, by kind; players load only when played. */
+      files(files) {
+        const box = document.getElementById('files');
+        const kinds = [
+          ['Videos', /\.(mp4|webm|mov)$/i],
+          ['Audio', /\.(mp3|wav)$/i],
+          ['Images', /\.(jpe?g|png)$/i],
+        ];
+        let count = 0;
+        for (const [label, re] of kinds) {
+          const group = files.filter(f => re.test(f.name));
+          if (!group.length) continue;
+          count += group.length;
+          box.append(el('h3', {}, label), el('div', { class: 'list' }, ...group.map(f => {
+            const src = url(f);
+            const media = label === 'Videos' ? el('video', { controls: '', playsinline: '', preload: 'none', src })
+              : label === 'Audio' ? player(src) : null;
+            return el('div', { class: 'item' },
+              el('div', { class: 'name' }, f.name),
+              el('div', { class: 'meta' }, `${size(f.size)} · ${when(f.mtime)} · `, el('a', { href: src, download: f.name }, 'download'), label === 'Images' ? ' · ' : null,
+                label === 'Images' ? el('a', { href: src, target: '_blank' }, 'open') : null),
+              media);
+          })));
+        }
+        if (!count) box.append(el('p', { class: 'empty' }, 'Nothing rendered yet.'));
+        return { count, newest: 0 };
+      },
+    };
+
+    const TABS = [
+      { id: 'review', name: 'Review' },
+      { id: 'post', name: 'To post' },
+      { id: 'published', name: 'Published' },
+      { id: 'voicelab', name: 'Voice lab' },
+      { id: 'files', name: 'Files' },
+    ];
+
+    function select(id) {
+      for (const t of TABS) document.getElementById(t.id).hidden = t.id !== id;
+      for (const b of document.getElementById('nav').children) b.setAttribute('aria-selected', String(b.dataset.id === id));
+      history.replaceState(null, '', '#' + id);
+    }
+
+    async function load() {
+      const files = ((await getJson('/videos/')) ?? [])
+        .filter(f => f.type === 'file')
+        .sort((a, b) => new Date(b.mtime) - new Date(a.mtime));
+      const settle = p => p.catch(e => { console.warn(e); return { count: 0, newest: 0 }; });
+      const [review, kits, voicelab] = await Promise.all([settle(SECTIONS.review(files)), SECTIONS.kits(files).catch(e => (console.warn(e), { post: { count: 0, newest: 0 }, published: { count: 0, newest: 0 } })), settle(SECTIONS.voicelab())]);
+      const stats = { review, post: kits.post, published: kits.published, voicelab, files: SECTIONS.files(files) };
+
+      const nav = document.getElementById('nav');
+      for (const t of TABS) {
+        const b = el('button', { role: 'tab', type: 'button' }, t.name, stats[t.id].count ? el('span', { class: 'badge' }, stats[t.id].count) : null);
+        b.dataset.id = t.id;
+        b.onclick = () => select(t.id);
+        nav.append(b);
+      }
+      // Open on the tab in the link (#review...), else on whatever was made most recently.
+      const asked = location.hash.slice(1);
+      const newest = ['review', 'post', 'voicelab'].sort((a, b) => stats[b].newest - stats[a].newest)[0];
+      select(TABS.some(t => t.id === asked) ? asked : stats[newest].newest ? newest : 'post');
+    }
+    load();
+  </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "title": "How bees make honey",
+  "format": "16:9",
+  "beats": [
+    {
+      "id": "intro",
+      "text": "Honey starts as flower nectar... and bees turn it into one of the few foods that almost never spoils.",
+      "scene": { "type": "title", "title": "How bees make honey", "subtitle": "From flower to jar" },
+      "cues": [
+        { "show": "title" },
+        { "at": "almost never spoils", "point": "subtitle" }
+      ]
+    },
+    {
+      "id": "steps",
+      "text": "A forager bee collects nectar from flowers and passes it to the bees in the hive. They spread it out and fan it with their wings until it dries, and then they seal each cell with wax.",
+      "scene": {
+        "type": "flow",
+        "heading": "From nectar to honey",
+        "steps": [
+          { "id": "collect", "label": "Collect", "detail": "nectar from flowers" },
+          { "id": "pass", "label": "Pass on", "detail": "bee to bee" },
+          { "id": "dry", "label": "Dry", "detail": "fanned by wings" },
+          { "id": "seal", "label": "Seal", "detail": "under a wax cap" }
+        ]
+      },
+      "cues": [
+        { "show": "slots" },
+        { "at": "collects nectar", "point": "collect" },
+        { "at": "passes it", "point": "pass" },
+        { "at": "fan it", "point": "dry" },
+        { "at": "seal each cell", "point": "seal" }
+      ]
+    },
+    {
+      "id": "water",
+      "text": "Nectar is mostly water and spoils within days, but honey is less than a fifth water, so it keeps for years.",
+      "scene": {
+        "type": "compare",
+        "left": { "title": "Nectar", "tone": "no", "items": [{ "id": "wet", "text": "mostly water" }, { "id": "spoils", "text": "spoils in days" }] },
+        "right": { "title": "Honey", "tone": "yes", "items": [{ "id": "dry", "text": "under 1/5 water" }, { "id": "keeps", "text": "keeps for years" }] }
+      },
+      "cues": [
+        { "at": "mostly water", "point": "wet" },
+        { "at": "spoils within", "point": "spoils" },
+        { "at": "less than a fifth", "point": "dry" },
+        { "at": "keeps for years", "point": "keeps" }
+      ]
+    },
+    {
+      "id": "comb",
+      "text": "Inside the hive, the open cells hold honey that is still drying, and the capped ones are finished and stored for winter.",
+      "scene": {
+        "type": "image",
+        "src": "assets/honeycomb.svg",
+        "caption": "Open cells dry, capped cells store",
+        "regions": { "open": [0.04, 0.1, 0.42, 0.8], "capped": [0.54, 0.1, 0.42, 0.8] }
+      },
+      "cues": [
+        { "at": "open cells", "point": "open" },
+        { "at": "capped ones", "point": "capped" },
+        { "at": "stored for winter", "show": "caption" }
+      ]
+    },
+    {
+      "id": "why",
+      "text": "It keeps because there is too little water for germs to grow, it is naturally acidic, and the wax cap keeps moisture out.",
+      "scene": {
+        "type": "points",
+        "heading": "Why honey keeps",
+        "items": [
+          { "id": "germs", "text": "Too little water for germs", "tone": "yes" },
+          { "id": "acid", "text": "Naturally acidic", "tone": "yes" },
+          { "id": "cap", "text": "Sealed from moisture", "tone": "yes" }
+        ]
+      },
+      "cues": [
+        { "show": "heading" },
+        { "at": "too little water", "point": "germs" },
+        { "at": "naturally acidic", "point": "acid" },
+        { "at": "wax cap", "point": "cap" }
+      ]
+    },
+    {
+      "id": "outro",
+      "text": "So every jar is a whole hive's teamwork, dried, sealed and saved for later.",
+      "scene": { "type": "text" }
+    }
+  ]
+}
