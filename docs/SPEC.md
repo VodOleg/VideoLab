@@ -155,6 +155,8 @@ for cues. Elements no cue names appear when the scene starts; cued elements pop 
 | `compare` | `left: Column`, `right: Column` | `left`, `right` (column titles), item ids | Before/after, myth/fact, A vs B |
 | `flow` | `heading?`, `steps: Step[]` | `heading`, `slots`, step ids | Processes, pipelines, timelines (2-6 steps) |
 | `image` | `src`, `caption?`, `regions?` | `image`, `caption`, region ids | Pictures, maps, charts, diagrams |
+| `road` | `heading?`, `label?`, `moves?`, `readouts?` | `heading`, `rider`, readout ids | A rider's journey: riding, stalling, pushing, racing off |
+| `3d` | `objects`, `light?`, `spotlight?`, `camera?`, `shots?`, `orbit?`, `heading?`, `background?`, `floor?`, `with?` | `heading`, object ids | Anything in space: products, models, figures, a stage with slides, 3D titles |
 
 ```ts
 Item   = { id: string; text: string; tone?: 'yes' | 'no' | 'accent'; strike?: boolean }
@@ -175,6 +177,102 @@ Step   = { id: string; label: string; detail?: string }
   network). PNG, JPEG, WebP or SVG. The picture is fitted inside the stage keeping its shape; `caption` goes under it.
   `regions` are named parts of the picture as `[x, y, width, height]` fractions of the picture
   (`{"lake": [0.1, 0.4, 0.3, 0.2]}`); pointing at a region lights it up, showing it outlines it.
+- **road**: a side view of a motorbike and its rider on a road, the camera following them; `label` is written on the
+  bike. `moves: [{ move, at? }]` switch what they do as the voice reaches each `at`: `ride` (default), `wheelie` (then
+  rides on), `stall` (the engine coughs, the bike rolls to a stop), `push` (the rider gets off and pushes it slowly,
+  under a rain cloud, while the clouds race by), `launch` (back on, a wheelie, out of the frame). Stalling and pushing
+  drain the colour; riding brings it back. `readouts: [{ id, value, label? }]` are numbers in panels under the heading,
+  cued like any element, that count up to `value` (`"4.0 m"` by tenths, `"10:00"` as minutes and seconds) until the
+  move they appeared in ends, then leave.
+
+### 3D scenes (`3d`)
+
+A real 3D space (three.js, drawn on the GPU): objects standing on a floor, lit by a preset, seen through a camera you
+describe by meaning. Units are metres, `y` is up, the floor is at `y = 0`, and the camera looks at the middle by
+default; `x` runs left to right and `z` towards the viewer when seen from the front.
+
+```ts
+Thing = {
+  id: string;
+  shape: 'box' | 'sphere' | 'cylinder' | 'cone' | 'torus' | 'capsule' | 'text' | 'model' | 'screen' | 'group';
+  text?: string;                 // shape 'text': raised letters (Montserrat Black)
+  src?: string;                  // shape 'model': a .glb/.gltf in the project folder ("assets/robot.glb")
+  slides?: Slide[];              // shape 'screen': a big display showing these, each from its `at` (crossfading)
+  parent?: string;               // part of another object: `at`/`turn` measured from its base and turn; moves,
+                                 // turns, scales and appears with it (shape 'group': an invisible frame for parts)
+  pivot?: 'middle' | 'base' | 'top';   // what it turns about (default middle; top: an arm from the shoulder)
+  stride?: number;               // degrees it swings about its pivot as its parent walks (legs, arms; signs alternate)
+  arc?: number;                  // a torus drawn only this many degrees round (a hook, a horseshoe)
+  scale?: number;                // its scale before any moves (default 1)
+  gone?: boolean;                // in a scene carried on `with` another: take it away (and its parts)
+  size?: number | [w, h, d];     // metres; one number: a box's side, a sphere's or ring's diameter, a model's largest
+                                 // side, text's letter size (default 1, text 0.5); a model is scaled to fit
+  at?: [x, y, z];                // the middle of its base (default [0, 0, 0]: on the floor in the middle)
+  turn?: number | [x, y, z];     // degrees round the vertical axis, or about each axis
+  color?: string; tone?: 'yes' | 'no' | 'accent';   // default: a colour from the kit's palette
+  material?: 'plastic' | 'matte' | 'metal' | 'glass' | 'glow';   // default plastic; glow also lights its surroundings
+  label?: string;                // a name tag over it, always facing the viewer
+  spin?: number;                 // degrees a second round the vertical axis
+  float?: boolean;               // bobs gently
+  animation?: string;            // a model's own animation, by name ("*": its first), looping
+  moves?: Array<{ at?: string; wait?: number; to?: [x, y, z]; turn?: number | [x, y, z]; scale?: number;
+                  seconds?: number; animation?: string }>;
+}
+Slide = {
+  at?: string; wait?: number;
+  layout?: 'plain' | 'quote' | 'code' | 'chat' | 'band';   // default plain
+  title?: string; text?: string; // text: lines separated by "\n"; *words* between stars in the accent colour
+  stamp?: string;                // a red rubber stamp slammed across it a moment after it appears ("BLOCKED")
+  color?: string;                // band: the status band's colour
+}
+Shot = {
+  at?: string; wait?: number;    // in `shots`: when the camera starts moving there (and `wait` seconds more)
+  frame?: string | string[];     // object ids to fit in the picture (default all)
+  angle?: 'three-quarter' | 'front' | 'side' | 'back' | 'top' | 'high' | 'low';   // default three-quarter
+  distance?: 'close' | 'medium' | 'wide';                                        // default medium
+  position?: [x, y, z]; target?: [x, y, z];   // exact placement instead (both win over frame/angle/distance)
+  fov?: number;                  // vertical field of view, degrees (default 35)
+  seconds?: number;              // how long the move takes (default 1.2)
+}
+```
+
+- **Camera by meaning**: `camera` is the opening shot; each of `shots` glides there from its `at`, swinging round the
+  subject rather than cutting through it. Framing fits the named objects' boxes to the free area (under the heading,
+  above the captions), so describe shots (`{"frame": "engine", "angle": "low", "distance": "close"}`) rather than
+  placing the camera by numbers. `orbit` circles the camera round what it looks at (degrees a second; 10-25 reads as
+  a slow, premium move).
+- **Lights**: `studio` (default: soft boxes over the theme's background, an endless floor fading into it), `day`
+  (blue sky, sun and shadows), `sunset` (low warm sun, long shadows), `night` (dark sky, stars, moonlight: use `glow`
+  materials for light), `stage` (a dark hall for talks and shows: pair it with a spotlight). `background` sets the
+  studio's colour, `floor` the floor's (`false`: none).
+- **Spotlight**: `spotlight: { on, angle, dim, changes }` is a theatre spot from above the audience with a visible beam,
+  following the object `on`, `angle` degrees wide (default 16); `dim` (0-1) darkens everything else. Each of
+  `changes` (`{ at, wait?, on?, angle?, dim?, seconds? }`) re-aims, widens or narrows it and dims the house as the
+  voice reaches its `at`.
+- **Timing**: every `at` (moves, slides, shots, spotlight changes) is a phrase from the beat's text; `wait` adds
+  seconds after it, for things that follow one another within a phrase.
+- **Figures from parts**: a `group` (or any object) as the body, parts with `parent` set to it; `pivot: "top"` and a
+  `turn` raise an arm from the shoulder, `stride` swings legs and arms as the body `moves` (one stride per 1.3 m).
+- **Screens**: `shape: "screen"` is a large display lit by its picture; its `slides` take the layouts `plain` (a big
+  `title`, `text` under it), `quote` (`text`: who said it), `code` (a terminal: "$ " lines are commands), `chat`
+  (`title`: the channel, `text` lines are messages, a line starting with "~" is crossed out) and `band` (a terminal
+  under a status band in `color` saying `title`).
+- **Carrying on**: `with: "<beat id>"` continues an earlier beat's 3d scene: its objects where their moves left them,
+  each model's last animation, the screen's last slide, its light, floor and the spotlight where it ended. `objects`
+  then add to them or change one by id (the fields given replace its own; `gone: true` removes it). Give each beat its
+  own `camera`/`shots`; the camera isn't carried.
+- **Cues** work on objects as on any element: an object with a `show` cue rises out of the floor at it; `point`,
+  `spot` and `blink` make it glow in the theme's accent; `spend` tips it over. Object `moves` and `shots` time
+  themselves with their own `at` phrases, like cycle arrows.
+- **Models**: glTF 2.0 (`.glb`, or `.gltf` with embedded data), loaded from the project folder; Draco-compressed
+  models aren't supported (no network decoder). Rigged and animated models work (`animation` plays a clip by name;
+  a wrong name stops the render with the list); a move's `animation` plays another clip from its `at` (for its
+  `seconds`, looping, else once) and blends back. Use models you may use: your own, generated, or CC0 (Kenney,
+  Quaternius, Poly Haven); credit CC BY ones.
+- **Turning about the middle**: a torus turned `[90, 0, 0]` lies flat at half its size above `at`; lower `at` by half
+  its size to rest it on the floor.
+- **Keep it readable**: a handful of objects in each shot, one subject per shot; name tags for what the voice names; a `title` or `text`
+  scene for statements (3D text is for short words).
 
 **Text sizes** are fitted automatically (Montserrat ExtraBold, estimated by character count), so long text shrinks
 rather than overflows. Short text reads better: items and step labels under ~35 characters, headings under ~40.
@@ -189,7 +287,13 @@ on the frame's shorter side, so 16:9, 9:16 and 1:1 look alike in proportion.
 ## 5. Cues and timing
 
 ```ts
-Cue = { at?: string; show?: string | string[]; point?: string | null }
+Cue = {
+  at?: string; until?: string;
+  show?: string | string[]; point?: string | null;
+  spot?: string | string[] | 'all' | null; blink?: string; note?: { on: string; text: string };
+  spend?: string; restore?: string;
+  alert?: { from?: string; title: string; text?: string };
+}
 ```
 
 - `at`: a phrase from the beat's `text`. The cue fires when the voice starts saying it (matched against whisper's
@@ -197,6 +301,9 @@ Cue = { at?: string; show?: string | string[]; point?: string | null }
   A phrase that isn't found logs a warning and fires at the beat's start: re-check the wording after edits.
 - `show`: element id(s) to make appear.
 - `point`: the narrator hops to the element and points at it; it also appears and lights up. `null` lowers the stick.
+- `alert`: a phone notification (an app name `from`, a bold `title`, a line of `text`) drops in near the top, under
+  the scene's heading, and goes back up at `until` (default 3 s later, or when the next alert comes). It works in any
+  scene: a message arriving, a limit hit, a reminder.
 - Unknown element ids stop the render with the list of valid ids.
 
 Timing rules:
@@ -356,6 +463,9 @@ A composition is a React component that draws one frame; the engine tells it whi
 | `random(seed)` | Deterministic 0-1 |
 | `loadFont(family, { weight: url })` | Registers a font; frames wait for it |
 | `delayRender(label)` / `continueRender(handle)` | Hold frames until async work is done |
+| `cancelRender(error)` | Fail the render from async work (the frame being waited for rejects with it) |
+| `<ThreeView width height fingerprint setup?>` | A three.js scene (react-three-fiber elements as children), drawn in step with the frame |
+| `useDrawMode()` | `'video'`, `'still'` (a contact sheet) or `'none'` (the hidden fingerprinting run): skip costly drawing in `'none'` |
 | `composition({ id, component, width, height, fps, durationInFrames, defaultProps, calculateMetadata })` | A composition; `calculateMetadata({ props })` returns size, length, props and `scenes: [{ id, from }]` |
 | `registerRoot(compositions)` | The entry (`src/video/index.ts`) |
 
@@ -367,6 +477,19 @@ that change what's drawn), so any frame can be drawn alone and in any order.
 the page in N tabs (half the CPU threads, at most 8); for each frame a tab sets the frame (`flushSync`), waits for
 fonts, `delayRender` locks and every `<img>` to decode, and captures a JPEG; frames are written to ffmpeg in order.
 The page applies `* { box-sizing: border-box }`.
+
+**3D** (`three.tsx`): a `ThreeView` hosts its own react-three-fiber root (`frameloop: 'never'`) on a hidden canvas.
+For each frame it renders its children, draws once, and shows the result as a picture (`<img>`) that the frame
+waits for like any image: a WebGL canvas reaches the screen whenever the browser next presents it, which in headless
+Chromium can be a frame late. Its children must be worked out from the frame and props like any component (no
+`useFrame` animation, clocks or randomness); anything three.js caches between frames must not depend on the frame
+(e.g. shadow bounds, which it doesn't re-project by itself). Async loads (models, fonts) suspend, and the frame waits;
+an error inside the 3D tree stops the render. In the fingerprinting run a `ThreeView` draws nothing and leaves its
+`fingerprint` (everything that decides its picture) in the DOM, naming the bundle, so a code change re-renders scenes
+with 3D in them; on a contact sheet each view draws once and becomes a picture (at most 4 WebGL contexts at a time).
+Chromium draws WebGL on the GPU (Direct3D on Windows; `VIDEOLAB_GPU=0` for software), and the WebGL renderer's name
+is part of 3D scenes' clip keys; everything else is drawn and composited in software, so 2D frames are identical
+either way. Measured: 1080p 3D renders at ~25 frames a second on an RTX 3060 laptop, the same pixels every run.
 
 **Sound** (`audio.ts`): a dry run over every frame in a hidden copy of the composition collects each `Audio`'s start,
 trim, loop and volume per frame; Node decodes the files (ffmpeg) and sums them into a 48 kHz stereo float WAV (volume
@@ -413,8 +536,12 @@ of the video code, which the renderer does itself.
 ## 15. Limits and known behaviour
 
 - English narration: whisper's model is `base.en` and the default voices are English.
-- The scene kit draws diagrams, text and still pictures; video clips inside scenes aren't supported yet (no `<Video>`
-  in the engine).
+- The scene kit draws diagrams, text, still pictures and 3D scenes; video clips inside scenes aren't supported yet (no
+  `<Video>` in the engine).
+- 3D renders are fast on a GPU and much slower in software; in the studio (live preview) 3D scenes play at reduced
+  speed, since each frame is drawn and turned into a picture.
+- Chromium's own 2D raster can differ by a few levels in a few pixels between runs (soft edges of filtered or
+  transformed elements under load); it's invisible, but re-rendered clips aren't byte-identical.
 - Text fitting estimates glyph widths; very long words in narrow boxes may still crowd.
 - whisper.cpp 1.5 has to be installed by hand (README); the model downloads itself.
 - Renders take RAM (each Chromium tab ~150-300 MB); lower the tab count with the engine's `concurrency` option on
@@ -430,6 +557,7 @@ The stack itself has no usage conditions:
 |---|---|
 | Kokoro (model and voices), kokoro-js, transformers.js, Playwright, TypeScript | Apache-2.0 |
 | whisper.cpp and the Whisper model, React, esbuild, ONNX Runtime | MIT |
+| three.js, @react-three/fiber, @react-three/drei, opentype.js | MIT |
 | Montserrat (`@fontsource/montserrat`) | SIL OFL 1.1 (free in videos, commercially too) |
 | Chromium | BSD-3-Clause and others |
 | ACE-Step 1.5 (optional music generation, installed on first use) | MIT |

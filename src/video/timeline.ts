@@ -5,7 +5,7 @@ const LEAD_IN_MS = 150;
 const BEAT_GAP_MS = 400;
 
 /** Rough speech timing: ~2.7 words/s, longer for long words, pauses after punctuation. */
-export function estimateTimeline(script: { beats: Array<{ id: string; text: string }> }): Timeline {
+export function estimateTimeline(script: { beats: Array<{ id: string; text: string; holdMs?: number }> }): Timeline {
   let t = LEAD_IN_MS;
   const beats: TimelineBeat[] = script.beats.map(beat => {
     const startMs = t;
@@ -16,7 +16,7 @@ export function estimateTimeline(script: { beats: Array<{ id: string; text: stri
       return w;
     });
     const endMs = words.at(-1)?.endMs ?? startMs;
-    t = endMs + BEAT_GAP_MS;
+    t = endMs + BEAT_GAP_MS + (beat.holdMs ?? 0);
     return { id: beat.id, startMs, endMs, words };
   });
   return { estimated: true, durationMs: beats.at(-1)?.endMs ?? 0, beats };

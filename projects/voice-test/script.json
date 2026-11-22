@@ -1,0 +1,7 @@
+{
+  "title": "Voice test",
+  "voice": { "elevenlabs": { "voiceId": "RdoeZkPeLyYazmUNiI38", "name": "Angus (Glasgow)", "model": "eleven_v4", "stability": 0.3, "similarityBoost": 0.8, "style": 0.5, "speed": 1.15, "draftSpeed": 0.93 } },
+  "beats": [
+    { "id": "test", "text": "This is a short test of the paid narrator voice, spoken once and cached.", "scene": { "type": "text" } }
+  ]
+}

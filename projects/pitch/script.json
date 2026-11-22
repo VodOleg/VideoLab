@@ -1,0 +1,299 @@
+{
+  "title": "Videos from a prompt",
+  "format": "16:9",
+  "narrator": "cab",
+  "theme": {
+    "bg": "#0c0c0e",
+    "panel": "#18181c",
+    "line": "#34343c",
+    "text": "#ffffff",
+    "muted": "#a0a0aa",
+    "accent": "#ff8c1a",
+    "yes": "#ff8c1a",
+    "no": "#8a8a94"
+  },
+  "voice": {
+    "elevenlabs": {
+      "voiceId": "RdoeZkPeLyYazmUNiI38",
+      "name": "Angus (Glasgow)",
+      "model": "eleven_v4",
+      "stability": 0.3,
+      "similarityBoost": 0.8,
+      "style": 0.5,
+      "speed": 1.15,
+      "draftSpeed": 0.93
+    }
+  },
+  "say": {
+    "ffmpeg": "F F mpeg"
+  },
+  "beats": [
+    {
+      "id": "hook",
+      "text": "Hi, I'm your cab for the next two minutes, and everything you're about to see was made from a single prompt.",
+      "scene": {
+        "type": "title",
+        "title": "Made from one prompt",
+        "subtitle": "No camera. No editor. No editing skills."
+      },
+      "cues": [
+        {
+          "at": "single prompt",
+          "show": "subtitle"
+        }
+      ]
+    },
+    {
+      "id": "idea",
+      "text": "The idea is simple. Anyone can turn an idea into a narrated, animated video, like a pitch, a lesson or an explainer, without any video editing skills.",
+      "scene": {
+        "type": "points",
+        "heading": "Ideas into videos",
+        "items": [
+          {
+            "id": "pitch",
+            "text": "A pitch"
+          },
+          {
+            "id": "lesson",
+            "text": "A lesson"
+          },
+          {
+            "id": "explainer",
+            "text": "An explainer"
+          },
+          {
+            "id": "noskills",
+            "text": "No video editing skills needed",
+            "tone": "accent"
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "a pitch",
+          "until": "an explainer",
+          "show": [
+            "pitch",
+            "lesson",
+            "explainer"
+          ]
+        },
+        {
+          "at": "without any",
+          "point": "noskills"
+        }
+      ]
+    },
+    {
+      "id": "prompt",
+      "text": "It starts with my human typing what they want, a black cab as the narrator, a diagram of how it all works, white, black and orange, and what it cost.",
+      "scene": {
+        "type": "typing",
+        "style": "chat",
+        "who": "My human",
+        "text": "I want to pitch this workflow of creating videos via prompt. Make a black cab the narrator. Explain step by step how this video is built, with an animated diagram of the stack. Use white, black and orange. Show what it cost and how long it took. End with: ask my human how to set it up.",
+        "from": "my human typing",
+        "until": "what it cost"
+      },
+      "cues": [
+        {
+          "show": "window"
+        },
+        {
+          "at": "what he wants",
+          "point": "window"
+        }
+      ]
+    },
+    {
+      "id": "script",
+      "text": "Claude turns that into a script, every line I say, the scene behind it, and the exact word each picture appears on, which is how I point at things right on time.",
+      "scene": {
+        "type": "typing",
+        "style": "code",
+        "title": "script.json",
+        "text": "{\n  \"id\": \"pipeline\",\n  \"text\": \"Then the pipeline takes over...\",\n  \"scene\": { \"type\": \"flow\" },\n  \"cues\": [{ \"at\": \"Whisper\", \"point\": \"timing\" }]\n}",
+        "from": "Claude turns",
+        "until": "appears on"
+      },
+      "cues": [
+        {
+          "show": "window"
+        },
+        {
+          "at": "right on time",
+          "point": "window"
+        }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "text": "Then the pipeline takes over. A voice reads the script, Whisper times every word, a browser draws every frame like a web page, and ffmpeg turns the frames into this video.",
+      "scene": {
+        "type": "flow",
+        "heading": "The pipeline",
+        "steps": [
+          {
+            "id": "voice",
+            "label": "Voice",
+            "detail": "reads the script"
+          },
+          {
+            "id": "timing",
+            "label": "Whisper",
+            "detail": "times every word"
+          },
+          {
+            "id": "frames",
+            "label": "Browser",
+            "detail": "draws every frame"
+          },
+          {
+            "id": "video",
+            "label": "ffmpeg",
+            "detail": "makes the video"
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "takes over",
+          "show": "slots"
+        },
+        {
+          "at": "A voice",
+          "point": "voice"
+        },
+        {
+          "at": "Whisper times",
+          "point": "timing"
+        },
+        {
+          "at": "a browser",
+          "point": "frames"
+        },
+        {
+          "at": "ffmpeg turns",
+          "point": "video"
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "text": "My human watches each draft on their phone and sends notes, Claude makes the changes, and only the scenes that changed are rendered again, in minutes.",
+      "scene": {
+        "type": "cycle",
+        "heading": "Review in minutes",
+        "reveal": true,
+        "nodes": [
+          {
+            "id": "watch",
+            "label": "Watch",
+            "detail": "on the phone"
+          },
+          {
+            "id": "notes",
+            "label": "Send notes"
+          },
+          {
+            "id": "edit",
+            "label": "Claude edits"
+          },
+          {
+            "id": "render",
+            "label": "Re-render",
+            "detail": "changed scenes only"
+          }
+        ],
+        "arrows": [
+          {
+            "from": "watch",
+            "to": "notes",
+            "at": "sends notes"
+          },
+          {
+            "from": "notes",
+            "to": "edit",
+            "at": "Claude makes"
+          },
+          {
+            "from": "edit",
+            "to": "render",
+            "at": "only the scenes"
+          },
+          {
+            "from": "render",
+            "to": "watch",
+            "at": "in minutes"
+          }
+        ]
+      }
+    },
+    {
+      "id": "result",
+      "text": "And the finished product is exactly what you're watching right now.",
+      "scene": {
+        "type": "title",
+        "title": "You're watching it",
+        "subtitle": "The finished product"
+      },
+      "cues": [
+        {
+          "at": "finished product",
+          "show": "title"
+        },
+        {
+          "at": "watching right now",
+          "show": "subtitle"
+        }
+      ]
+    },
+    {
+      "id": "worth",
+      "text": "My human spent a few minutes typing, the tools are free and run on their own computer, and the AI and the voice for this video cost about five dollars, instead of days of filming and editing.",
+      "scene": {
+        "type": "figures",
+        "items": [
+          {
+            "id": "time",
+            "icon": "clock",
+            "value": "5 min",
+            "label": "of typing"
+          },
+          {
+            "id": "money",
+            "icon": "money",
+            "value": "$5",
+            "label": "of AI and voice"
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "a few minutes",
+          "show": "time"
+        },
+        {
+          "at": "cost about",
+          "show": "money"
+        }
+      ]
+    },
+    {
+      "id": "outro",
+      "text": "Want videos like this for your own ideas? Ask me how to set it up, via my human.",
+      "scene": {
+        "type": "title",
+        "title": "Want your own?",
+        "subtitle": "Ask me, via my human"
+      },
+      "cues": [
+        {
+          "at": "Ask me",
+          "show": "subtitle"
+        }
+      ]
+    }
+  ]
+}

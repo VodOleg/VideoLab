@@ -29,7 +29,8 @@ Create `projects/<name>/script.json` (copy `projects/example/script.json`; the f
   dramatic pause per video; `..` only where words would run together. No question-and-answer delivery, no
   pause-heavy lines. Spell numbers as they're said ("a fifth", "twelve thousand").
 - **Pick the scene for the idea**: `title` (openers, chapters), `points` (reasons, features), `compare` (A vs B,
-  myth vs fact), `flow` (steps, processes, timelines), `image` (anything visual), `text` (a statement or closer).
+  myth vs fact), `flow` (steps, processes, timelines), `image` (anything visual), `text` (a statement or closer),
+  `3d` (objects, products and models in space, with camera moves; describe shots by meaning, SPEC section 4).
   Vary them: the same scene type five times in a row is monotonous.
 - **Show each thing the moment it's named**: a cue with `at` (a phrase from the beat's text) for every element, and
   `point` for the one being talked about. Elements without a cue appear when the scene starts.

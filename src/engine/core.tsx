@@ -14,6 +14,15 @@ export const TimingContext = createContext<Timing>({ frame: 0, offset: 0, frozen
 /** The current frame, counted from the start of the enclosing Sequence. */
 export const useCurrentFrame = () => useContext(TimingContext).frame;
 
+/**
+ * How the composition is being drawn: 'video' (frames to capture, or the studio), 'still' (a contact sheet: many
+ * frames on one page, each drawn once) or 'none' (the hidden run that only collects the soundtrack and fingerprints:
+ * costly drawing can be skipped, as long as the DOM still tells the frames apart).
+ */
+export type DrawMode = 'video' | 'still' | 'none';
+export const DrawModeContext = createContext<DrawMode>('video');
+export const useDrawMode = () => useContext(DrawModeContext);
+
 export function useVideoConfig(): VideoConfig {
   const config = useContext(ConfigContext);
   if (!config) throw new Error('useVideoConfig outside a composition');
@@ -54,9 +63,11 @@ export const Img: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = props =>
 export const staticFile = (file: string) => `/static/${file.replace(/^\/+/, '').split('/').map(encodeURIComponent).join('/')}`;
 
 // Work a frame waits for before it's captured (fonts, data). Like a lock: delayRender takes it, continueRender releases it.
+// cancelRender fails the frame instead (work that went wrong where no one else would hear of it).
 const pending = new Map<number, string>();
 let nextHandle = 0;
-const waiters = new Set<() => void>();
+const waiters = new Set<{ done: () => void; fail: (err: unknown) => void }>();
+let failure: unknown = null;
 
 export function delayRender(label = 'delayRender'): number {
   pending.set(++nextHandle, label);
@@ -65,16 +76,26 @@ export function delayRender(label = 'delayRender'): number {
 
 export function continueRender(handle: number) {
   pending.delete(handle);
-  if (!pending.size) for (const w of waiters) w();
+  if (!pending.size) for (const w of waiters) w.done();
 }
 
-/** Resolves once nothing holds delayRender; rejects after `timeoutMs`, naming what was still pending. */
+/** Stops the render: the frame being waited for (and every one after) fails with `err`. */
+export function cancelRender(err: unknown) {
+  failure ??= err instanceof Error ? err : new Error(String(err));
+  for (const w of waiters) w.fail(failure);
+}
+
+/** Resolves once nothing holds delayRender; rejects after `timeoutMs`, naming what was still pending, or on cancelRender. */
 export function whenNothingPending(timeoutMs: number): Promise<void> {
+  if (failure) return Promise.reject(failure);
   if (!pending.size) return Promise.resolve();
   return new Promise((resolve, reject) => {
-    const done = () => { clearTimeout(timer); waiters.delete(done); resolve(); };
-    const timer = setTimeout(() => { waiters.delete(done); reject(new Error(`still waiting after ${timeoutMs / 1000}s for: ${[...pending.values()].join(', ')}`)); }, timeoutMs);
-    waiters.add(done);
+    const waiter = {
+      done: () => { clearTimeout(timer); waiters.delete(waiter); resolve(); },
+      fail: (err: unknown) => { clearTimeout(timer); waiters.delete(waiter); reject(err); },
+    };
+    const timer = setTimeout(() => { waiters.delete(waiter); reject(new Error(`still waiting after ${timeoutMs / 1000}s for: ${[...pending.values()].join(', ')}`)); }, timeoutMs);
+    waiters.add(waiter);
   });
 }
 

@@ -12,6 +12,7 @@ import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { ffmpeg, measureLoudness } from './engine/ffmpeg.ts';
 import { renderScenes, renderSheet, renderVideo, type SceneResult } from './engine/render.ts';
+import { prepareMarks } from './marks.ts';
 import type { Script, Timeline } from './types.ts';
 import { musicOf } from './video/music.ts';
 
@@ -84,6 +85,7 @@ async function main() {
   await mkdir(path.join(dir, 'build'), { recursive: true });
   await mkdir(path.resolve('out'), { recursive: true });
   await writeLevels(dir);
+  if (script.beats.some(b => b.scene?.type === 'image' && b.scene.marks?.length)) await prepareMarks(name);
   const props = { project: name, beats: beatsArg };
   const outName = beatsArg ? `${name}.${beatsArg.join('-')}` : name;
 
@@ -131,6 +133,10 @@ async function main() {
 
   ffmpeg(['-i', out, ...PREVIEW, out.replace(/\.mp4$/, '.preview.mp4')]);
   console.log(`wrote ${out} and its .preview.mp4`);
+  // For the review page and the posting kit: whose voice this cut has, and whether it's a draft (a Kokoro stand-in for a paid voice).
+  const timeline = JSON.parse(await readFile(path.join(dir, 'build', 'timeline.json'), 'utf8').catch(() => '{}')) as Partial<Timeline>;
+  await writeFile(out.replace(/\.mp4$/, '.cut.json'), JSON.stringify({ voice: timeline.voice ?? null, draft: !!timeline.draft }, null, 2));
+  if (timeline.draft) console.log(`draft voice: before posting, run npm run voice -- ${name} --final and render again`);
   if (result.scenes) await writeSceneClips(out, result.scenes, script, result.config.fps);
 }
 

@@ -4,7 +4,7 @@ import type React from 'react';
 import { useState } from 'react';
 import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
-import { AudioSinkContext, ConfigContext, TimingContext, whenNothingPending, type AudioReport, type VideoConfig } from './core.tsx';
+import { AudioSinkContext, ConfigContext, DrawModeContext, TimingContext, whenNothingPending, type AudioReport, type DrawMode, type VideoConfig } from './core.tsx';
 
 /** Where a scene starts; it runs until the next one. Rendering scene by scene re-renders only the scenes that changed. */
 export interface SceneCut { id: string; from: number }
@@ -99,16 +99,18 @@ const FILE_URL = /\/(?:static|bundle)\/[^"'()\s&<>]+/g;
 
 type Sink = (report: AudioReport) => void;
 
-/** The composition at one frame, in a box of its own size. `sink` collects its audio. */
-export const Stage: React.FC<{ resolved: Resolved; frame: number; sink?: Sink }> = ({ resolved: { def, config, props }, frame, sink = null }) => {
+/** The composition at one frame, in a box of its own size. `sink` collects its audio (and then nothing costly is drawn). */
+export const Stage: React.FC<{ resolved: Resolved; frame: number; sink?: Sink; mode?: DrawMode }> = ({ resolved: { def, config, props }, frame, sink = null, mode = 'video' }) => {
   const Component = def.component;
   return (
     <ConfigContext.Provider value={config}>
       <TimingContext.Provider value={{ frame, offset: 0, frozen: false }}>
         <AudioSinkContext.Provider value={sink}>
-          <div style={{ position: 'relative', width: config.width, height: config.height, overflow: 'hidden' }}>
-            <Component {...props} />
-          </div>
+          <DrawModeContext.Provider value={sink ? 'none' : mode}>
+            <div style={{ position: 'relative', width: config.width, height: config.height, overflow: 'hidden' }}>
+              <Component {...props} />
+            </div>
+          </DrawModeContext.Provider>
         </AudioSinkContext.Provider>
       </TimingContext.Provider>
     </ConfigContext.Provider>
@@ -154,7 +156,7 @@ export class FrameRoot {
               {label}
             </div>
             <div style={{ position: 'absolute', top: SHEET_LABEL_H, left: 0, width, height, transform: `scale(${scale})`, transformOrigin: '0 0' }}>
-              <Stage resolved={resolved} frame={frame} />
+              <Stage resolved={resolved} frame={frame} mode="still" />
             </div>
           </div>
         ))}
@@ -187,7 +189,7 @@ export async function ready(host: HTMLElement) {
 /**
  * A run over every frame in a hidden copy of the composition (the visible one keeps its frame): the soundtrack, and
  * with `fingerprint` each frame's DOM hash and the files it shows. Anything drawn outside the DOM (a canvas) or set
- * up in code (a font's files) isn't in the fingerprint.
+ * up in code (a font's files) isn't in the fingerprint, unless it leaves a mark in the DOM here (ThreeView does).
  */
 export async function dryRun(resolved: Resolved, fingerprint: boolean): Promise<DryRun> {
   const host = document.createElement('div');

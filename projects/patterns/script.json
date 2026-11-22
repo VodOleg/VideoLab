@@ -1,0 +1,87 @@
+{
+  "title": "The water cycle",
+  "beats": [
+    {
+      "id": "intro",
+      "text": "The water you drink today has fallen as rain many times before.",
+      "scene": { "type": "title", "title": "The water cycle", "subtitle": "The same water, over and over" },
+      "cues": [{ "at": "many times", "show": "subtitle" }]
+    },
+    {
+      "id": "forms",
+      "text": "Water comes in three forms, solid ice, liquid water and invisible vapor, and the cycle keeps turning one into another.",
+      "scene": {
+        "type": "points",
+        "heading": "Three forms of water",
+        "items": [{ "id": "ice", "text": "Ice" }, { "id": "liquid", "text": "Liquid water" }, { "id": "vapor", "text": "Water vapor" }]
+      },
+      "cues": [
+        { "at": "solid ice", "until": "invisible vapor", "show": ["ice", "liquid", "vapor"] },
+        { "at": "invisible vapor", "spot": "vapor" },
+        { "at": "the cycle", "spot": "all" }
+      ]
+    },
+    {
+      "id": "oceans",
+      "text": "Most of it sits in the oceans as liquid water.",
+      "scene": {
+        "type": "points",
+        "heading": "Three forms of water",
+        "items": [{ "id": "ice", "text": "Ice" }, { "id": "liquid", "text": "Liquid water" }, { "id": "vapor", "text": "Water vapor" }]
+      },
+      "cues": [
+        { "at": "Most of it", "spot": "liquid" },
+        { "at": "the oceans", "note": { "on": "liquid", "text": "oceans" } }
+      ]
+    },
+    {
+      "id": "loop",
+      "text": "The sun warms the oceans until water evaporates into clouds, then it falls as rain, runs into rivers, and flows back to the sea, over and over.",
+      "scene": {
+        "type": "cycle",
+        "heading": "Round and round",
+        "reveal": true,
+        "nodes": [
+          { "id": "sea", "label": "Oceans", "tone": "accent" },
+          { "id": "clouds", "label": "Clouds" },
+          { "id": "rain", "label": "Rain" },
+          { "id": "rivers", "label": "Rivers" }
+        ],
+        "arrows": [
+          { "from": "sea", "to": "clouds", "at": "evaporates", "label": "evaporation", "carry": true },
+          { "from": "clouds", "to": "rain", "at": "falls as rain" },
+          { "from": "rain", "to": "rivers", "at": "runs into" },
+          { "from": "rivers", "to": "sea", "at": "flows back" }
+        ]
+      },
+      "cues": [
+        { "at": "sun warms", "until": "evaporates", "blink": "sea" },
+        { "at": "falls as rain", "spend": "clouds" },
+        { "at": "over and over", "restore": "clouds" }
+      ]
+    },
+    {
+      "id": "journey",
+      "text": "On day one a drop evaporates and rises, about nine days later it falls as rain, and months later it is back in the sea.",
+      "scene": {
+        "type": "timeline",
+        "heading": "One drop's journey",
+        "steps": [
+          { "id": "day1", "label": "Day 1", "items": ["Evaporates", "Rises"], "at": "day one" },
+          { "id": "day9", "label": "Day 9", "items": ["Falls as rain"], "at": "nine days", "note": "rain" },
+          { "id": "later", "label": "Months", "items": ["Back in the sea"], "at": "months later" }
+        ]
+      }
+    },
+    {
+      "id": "forecast",
+      "text": "So a forecast of heavy rain is really the cycle at work.",
+      "scene": { "type": "image", "src": "assets/forecast.svg", "marks": [{ "text": "Heavy rain", "at": "heavy rain" }] }
+    },
+    {
+      "id": "outro",
+      "text": "Every glass of water has been around this loop many times.",
+      "scene": { "type": "text" }
+    }
+  ]
+}

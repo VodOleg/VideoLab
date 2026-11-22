@@ -1,29 +1,39 @@
-// Voice: projects/<name>/script.json -> per-beat Kokoro voiceover + whisper.cpp word timings -> build/timeline.json
+// Voice: projects/<name>/script.json -> per-beat voiceover (Kokoro, or ElevenLabs with "voice": {"elevenlabs": ...}) +
+// whisper.cpp word timings -> build/timeline.json
 // Usage: npm run voice -- <name> [--voice am_michael] [--speed 1.12] [--only intro,why [--note "..."]]  (defaults: script.json "voice", else the stack's NARRATOR)
 //        npm run voice -- <name> --only intro --try "Honey never spoils... ever." --try "..."   (options for one beat's text)
+//        npm run voice -- <name> --final   (a script with an ElevenLabs voice: the paid voice; without --final, a free Kokoro draft paced like it)
 // A "..." (or ".." for a short pause) ends a phrase: each phrase is spoken on its own and they're joined with exact silence, so a pause never
-// cuts into a word (looking for Kokoro's own gap in the audio split "Bolas" and "roads" before their final s).
+// cuts into a word (looking for Kokoro's own gap in the audio instead once split a word before its final s).
 // --only: preview just those beats in out/previews/ (the served page's Review tab, with each beat's text and the --note),
 // to check pronunciation, without touching build/. Each preview run replaces the last one. With --try (repeatable) and a
 // single --only beat, the previews are alternative texts for that beat, numbered intro-1, intro-2... for the user to pick.
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { describeEleven, speakEleven } from './elevenlabs.ts';
 import { ffmpeg } from './engine/ffmpeg.ts';
-import { describeVoice, loadKokoro, NARRATOR, speakBeat, spokenWords, wav, type Voice } from './tts.ts';
-import type { Script, Timeline, TimelineBeat, Word } from './types.ts';
+import { describeVoice, loadKokoro, NARRATOR, pauseAfter, speakBeat, spokenWords, TAIL_KEEP_MS, trim, wav, type Voice } from './tts.ts';
+import type { ElevenVoice, Script, Timeline, TimelineBeat, Word } from './types.ts';
 import { installWhisper, transcribeWords } from './whisper.ts';
 
 const LEAD_IN_MS = 150;
 const BEAT_GAP_MS = 250;
+// An ElevenLabs voice stops for ~0.5 s at a sentence end or colon (340-660 ms measured) where Kokoro runs on after
+// ~0.2 s, so a draft also ends a phrase there and adds this much silence, keeping its length close to the final's.
+const DRAFT_STOP_MS = 500;
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const name = args.find(a => !a.startsWith('--') && !args[args.indexOf(a) - 1]?.startsWith('--'));
-  if (!name) throw new Error('usage: npm run voice -- <name> [--voice am_michael] [--speed 1.12] [--only intro,why [--note "..."]]');
-  const opt = (name: string) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : undefined; };
+  const valued = ['--voice', '--speed', '--only', '--note', '--try'];
+  const name = args.find((a, i) => !a.startsWith('--') && !valued.includes(args[i - 1]));
+  if (!name) throw new Error('usage: npm run voice -- <name> [--final] [--voice am_michael] [--speed 1.12] [--only intro,why [--note "..."]]');
+  const opt = (flag: string) => { const i = args.indexOf(`--${flag}`); return i >= 0 ? args[i + 1] : undefined; };
   const speed = opt('speed');
   const tries = args.flatMap((a, i) => (a === '--try' ? [args[i + 1]] : []));
-  return { name, voice: opt('voice'), speed: speed === undefined ? undefined : Number(speed), only: opt('only')?.split(','), note: opt('note'), tries };
+  return {
+    name, voice: opt('voice'), speed: speed === undefined ? undefined : Number(speed), only: opt('only')?.split(','), note: opt('note'), tries,
+    final: args.includes('--final'),
+  };
 }
 
 /** Linear resampling; good enough for whisper (which needs 16 kHz). */
@@ -40,10 +50,33 @@ const NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 
 const normalize = (w: string) => w.toLowerCase().replace(/\d+/g, n => NUMBERS[Number(n)] ?? n).replace(/[^\p{L}\p{N}]/gu, '');
 
 /**
+ * Whisper sometimes stretches one word over seconds and squeezes the next few into milliseconds (once a name spanned
+ * 1.0-5.2 s and the eight words after it fell inside 0.3 s, bunching the captions and breaking phrase cues). A word
+ * lasting at least max(900, 160 x its length) ms followed by 2+ words under 120 ms each has the whole run spread over
+ * its span, in proportion to word length.
+ */
+function unsquash(heard: Word[]): Word[] {
+  const out = heard.map(w => ({ ...w }));
+  const len = (w: Word) => normalize(w.text).length || 1;
+  for (let i = 0; i < out.length; i++) {
+    if (out[i].endMs - out[i].startMs < Math.max(900, 160 * len(out[i]))) continue;
+    let k = i + 1;
+    while (k < out.length && out[k].endMs - out[k].startMs < 120) k++;
+    if (k - i < 3) continue; // a long word alone is just a slow one
+    const from = out[i].startMs, to = out[k - 1].endMs, total = out.slice(i, k).reduce((s, w) => s + len(w) + 1, 0);
+    let t = from;
+    for (let x = i; x < k; x++) { out[x].startMs = t; out[x].endMs = t += ((to - from) * (len(out[x]) + 1)) / total; }
+    i = k - 1;
+  }
+  return out;
+}
+
+/**
  * Give each script word the time of the matching whisper word (edit-distance alignment).
  * Unmatched script words are spread over the gap between their matched neighbours.
  */
-export function alignWords(scriptWords: string[], heard: Word[], totalMs: number): Word[] {
+export function alignWords(scriptWords: string[], heardRaw: Word[], totalMs: number): Word[] {
+  const heard = unsquash(heardRaw);
   const a = scriptWords.map(normalize), b = heard.map(w => normalize(w.text));
   const n = a.length, m = b.length;
   const d = Array.from({ length: n + 1 }, (_, i) => Array.from({ length: m + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)));
@@ -79,8 +112,24 @@ async function main() {
   const args = parseArgs();
   const dir = path.join('projects', args.name);
   const script = JSON.parse(await readFile(path.join(dir, 'script.json'), 'utf8')) as Script;
-  const voice: Voice = args.voice ?? script.voice?.mix ?? script.voice?.name ?? NARRATOR.voice;
-  const speed = args.speed ?? script.voice?.speed ?? NARRATOR.speed;
+  // An ElevenLabs voice costs money per character, so it only speaks with --final: until then the script is drafted with
+  // the free Kokoro narrator at the voice's draftSpeed, so the draft's timing (and the video's length) is close to the
+  // final one. --voice / --speed pick a Kokoro voice over the script's ElevenLabs one.
+  const scriptEleven = script.voice && 'elevenlabs' in script.voice ? script.voice.elevenlabs : undefined;
+  if (args.final && !scriptEleven) throw new Error(`--final is for scripts with an ElevenLabs voice; ${dir}/script.json has none`);
+  const eleven: ElevenVoice | undefined = args.final && args.voice === undefined && args.speed === undefined ? scriptEleven : undefined;
+  const draft = !!scriptEleven && !eleven;
+  const kokoro = script.voice && !('elevenlabs' in script.voice) ? script.voice : undefined;
+  const voice: Voice = args.voice ?? kokoro?.mix ?? kokoro?.name ?? NARRATOR.voice;
+  const speed = args.speed ?? kokoro?.speed ?? scriptEleven?.draftSpeed ?? NARRATOR.speed;
+  // A beat's own speed is meant for the ElevenLabs voice: the draft scales its own speed by the same ratio.
+  const beatSpeed = (s: number | undefined) => (s === undefined ? speed : draft && args.speed === undefined ? (speed * s) / (scriptEleven!.speed ?? 1) : s);
+  // Titles aren't sentence ends: "Ms. Smith" gets no stop.
+  const pause = draft ? (w: string) => pauseAfter(w) || (/[.?!:]$/.test(w) && !/^(Mr|Mrs|Ms|Dr|St)\.$/i.test(w) ? DRAFT_STOP_MS : 0) : pauseAfter;
+  if (eleven) {
+    const phonemes = Object.entries(script.say ?? {}).filter(([, s]) => s.startsWith('/'));
+    if (phonemes.length) throw new Error(`ElevenLabs can't read phonemes: respell ${phonemes.map(([w]) => w).join(', ')} in "say"`);
+  }
   let beatsToSay = args.only ? script.beats.filter(b => args.only!.includes(b.id)) : script.beats;
   if (!beatsToSay.length) throw new Error(`no beats ${args.only?.join(', ')} in ${dir}/script.json`);
   if (args.tries.length) {
@@ -92,15 +141,24 @@ async function main() {
   await mkdir(voiceDir, { recursive: true });
 
   await installWhisper();
-  console.log(`Loading Kokoro (${describeVoice(voice)}, speed ${speed})`);
-  const tts = await loadKokoro();
+  const voiceName = eleven ? describeEleven(eleven)
+    : `${draft ? `Kokoro draft for ${scriptEleven!.name ?? 'ElevenLabs'}: ` : ''}${describeVoice(voice)}, speed ${speed}`;
+  console.log(eleven ? `Voice: ${voiceName}` : `Loading Kokoro (${voiceName})`);
+  if (draft) console.log('Draft voice (free): run with --final for the ElevenLabs voice once the script is settled');
+  const tts = eleven ? null : await loadKokoro();
 
   let cursor = LEAD_IN_MS;
   const beats: TimelineBeat[] = [];
   for (const beat of beatsToSay) {
     const display = beat.text.split(/\s+/).filter(Boolean);
     const spoken = spokenWords(display, script.say ?? {});
-    const { samples, rate, ranges, bounds } = await speakBeat(tts, display, spoken, voice, speed);
+    // ElevenLabs speaks a beat in one go (its own pauses at punctuation), trimmed like Kokoro's: a short lead-in, TAIL_KEEP_MS after.
+    const { samples, rate, ranges, bounds } = eleven
+      ? await speakEleven(spoken.join(' '), { ...eleven, stability: beat.stability ?? eleven.stability, style: beat.style ?? eleven.style }, beat.speed ?? eleven.speed).then(({ samples, rate }) => {
+        const audio = trim(samples, rate, 30, TAIL_KEEP_MS, 0.01);
+        return { samples: audio, rate, ranges: [[0, display.length]], bounds: [[0, (audio.length / rate) * 1000]] };
+      })
+      : await speakBeat(tts!, display, spoken, voice, beatSpeed(beat.speed), pause);
     const durationMs = (samples.length / rate) * 1000;
 
     const heard = await hear(samples, rate, path.join(voiceDir, `${beat.id}.16k.wav`));
@@ -123,7 +181,7 @@ async function main() {
       audio: `build/voice/${beat.id}.wav`,
       words: words.map(w => ({ ...w, startMs: Math.round(cursor + w.startMs), endMs: Math.round(cursor + w.endMs) })),
     });
-    cursor += durationMs + BEAT_GAP_MS;
+    cursor += durationMs + BEAT_GAP_MS + (beat.holdMs ?? 0);
   }
 
   if (args.only) {
@@ -138,13 +196,13 @@ async function main() {
       console.log(`Preview: ${path.join(previewDir, file)}`);
     }
     await writeFile(path.join(previewDir, 'previews.json'), JSON.stringify({
-      project: args.name, voice: describeVoice(voice), note: args.note, createdAt: new Date().toISOString(), beats: previews,
+      project: args.name, voice: voiceName, note: args.note, createdAt: new Date().toISOString(), beats: previews,
     }, null, 2));
     return;
   }
-  const timeline: Timeline = { estimated: false, durationMs: beats.at(-1)!.endMs, beats };
+  const timeline: Timeline = { estimated: false, voice: voiceName, ...(draft && { draft }), durationMs: beats.at(-1)!.endMs, beats };
   await writeFile(path.join(dir, 'build', 'timeline.json'), JSON.stringify(timeline, null, 2));
-  console.log(`Wrote ${path.join(dir, 'build', 'timeline.json')} (${(timeline.durationMs / 1000).toFixed(1)}s of voiceover)`);
+  console.log(`Wrote ${path.join(dir, 'build', 'timeline.json')} (${(timeline.durationMs / 1000).toFixed(1)}s of ${draft ? 'draft ' : ''}voiceover)`);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });

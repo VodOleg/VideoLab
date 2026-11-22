@@ -1,6 +1,7 @@
 import { composition, staticFile, type CalculateMetadataFunction } from '../engine/index.ts';
-import type { Format, Script, Timeline } from '../types.ts';
+import type { Format, MarkBox, Script, Timeline } from '../types.ts';
 import { musicOf } from './music.ts';
+import { carryScenes } from './carry.ts';
 import { SCENE_LEAD_FRAMES } from './plan.ts';
 import { beatScenes, estimateTimeline } from './timeline.ts';
 import { Video, type Levels, type VideoProps } from './Video.tsx';
@@ -64,7 +65,8 @@ const calculateVideo: CalculateMetadataFunction<VideoProps> = async ({ props }) 
     fetchJson<Levels>(`${dir}/build/levels.json`),
   ]);
   if (!loaded) throw new Error(`projects/${dir}/script.json missing`);
-  let script = loaded;
+  // 3d scenes carried on from an earlier beat's get its objects and lights here.
+  let script = carryScenes(loaded);
   let timeline = voiced ?? estimateTimeline(script);
   let offsetMs = 0;
   if (props.beats?.length) {
@@ -81,14 +83,19 @@ const calculateVideo: CalculateMetadataFunction<VideoProps> = async ({ props }) 
     };
     script = { ...script, beats: script.beats.filter(b => only.includes(b.id)) };
   }
+  // Underlines found by OCR (npm run render writes build/marks.json when image scenes have marks).
+  const hasMarks = script.beats.some(b => b.scene?.type === 'image' && b.scene.marks?.some(m => !m.box));
+  const marks = hasMarks ? await fetchJson<Record<string, MarkBox[]>>(`${dir}/build/marks.json`) : null;
+  if (hasMarks && !marks) console.warn(`projects/${dir}/build/marks.json missing: run npm run render to find the underlined words`);
   const format = script.format ?? '16:9';
   if (!SIZES[format]) throw new Error(`format "${format}" isn't one of ${Object.keys(SIZES).join(', ')}`);
   return {
     ...SIZES[format],
-    durationInFrames: Math.ceil(((timeline.durationMs + TAIL_MS) / 1000) * FPS),
+    // The last beat's hold keeps its picture up at the end too.
+    durationInFrames: Math.ceil(((timeline.durationMs + TAIL_MS + (script.beats.at(-1)?.holdMs ?? 0)) / 1000) * FPS),
     scenes: beatScenes(timeline, FPS, SCENE_LEAD_FRAMES),
     props: {
-      ...props, script, timeline, levels, images: await imageSizes(dir, script),
+      ...props, script, timeline, levels, images: await imageSizes(dir, script), marks: marks ?? {},
       ...(await loadMusic(dir, script)), musicStartMs: (musicOf(script)?.startMs ?? 0) + offsetMs,
     },
   };

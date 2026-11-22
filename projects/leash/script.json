@@ -1,0 +1,3792 @@
+{
+  "title": "I Built My AI a Leash. It Helped.",
+  "format": "16:9",
+  "narrator": false,
+  "captions": true,
+  "theme": {
+    "accent": "#ff7a45"
+  },
+  "voice": {
+    "elevenlabs": {
+      "voiceId": "RdoeZkPeLyYazmUNiI38",
+      "name": "Angus (Glasgow)",
+      "model": "eleven_v4",
+      "stability": 0.42,
+      "similarityBoost": 0.8,
+      "style": 0.4,
+      "speed": 1.1,
+      "draftSpeed": 0.89
+    }
+  },
+  "beats": [
+    {
+      "id": "open",
+      "text": "Raise your hand if you've ever told an AI not to do something... and it did it anyway. Politely.",
+      "holdMs": 300,
+      "scene": {
+        "type": "3d",
+        "light": "stage",
+        "spotlight": {
+          "on": "speaker",
+          "angle": 15,
+          "dim": 0.35
+        },
+        "objects": [
+          {
+            "id": "backdrop",
+            "shape": "box",
+            "size": [
+              17,
+              6.6,
+              0.3
+            ],
+            "at": [
+              0,
+              0,
+              -4.1
+            ],
+            "color": "#100e18",
+            "material": "matte"
+          },
+          {
+            "id": "screen",
+            "shape": "screen",
+            "size": [
+              6.2,
+              3.49,
+              0.12
+            ],
+            "at": [
+              0,
+              1.4,
+              -3.7
+            ],
+            "slides": [
+              {
+                "title": "I Built My AI a Leash.",
+                "text": "*It helped.*"
+              }
+            ]
+          },
+          {
+            "id": "carpet",
+            "shape": "cylinder",
+            "size": [
+              3.9,
+              0.025,
+              3.9
+            ],
+            "at": [
+              0,
+              0,
+              0.1
+            ],
+            "color": "#b5121b",
+            "material": "matte"
+          },
+          {
+            "id": "speaker",
+            "shape": "group",
+            "size": [
+              0.62,
+              1.8,
+              0.4
+            ],
+            "pivot": "base",
+            "at": [
+              -4.4,
+              0,
+              0.3
+            ],
+            "turn": 70,
+            "moves": [
+              {
+                "to": [
+                  0,
+                  0,
+                  0.3
+                ],
+                "seconds": 2.6
+              },
+              {
+                "wait": 2.4,
+                "turn": 0,
+                "seconds": 0.6
+              }
+            ]
+          },
+          {
+            "id": "legL",
+            "parent": "speaker",
+            "shape": "capsule",
+            "size": [
+              0.15,
+              0.88,
+              0.15
+            ],
+            "at": [
+              -0.1,
+              0,
+              0
+            ],
+            "pivot": "top",
+            "stride": 24,
+            "color": "#1e2433",
+            "material": "matte"
+          },
+          {
+            "id": "legR",
+            "parent": "speaker",
+            "shape": "capsule",
+            "size": [
+              0.15,
+              0.88,
+              0.15
+            ],
+            "at": [
+              0.1,
+              0,
+              0
+            ],
+            "pivot": "top",
+            "stride": -24,
+            "color": "#1e2433",
+            "material": "matte"
+          },
+          {
+            "id": "torso",
+            "parent": "speaker",
+            "shape": "box",
+            "size": [
+              0.48,
+              0.62,
+              0.27
+            ],
+            "at": [
+              0,
+              0.82,
+              0
+            ],
+            "color": "#2d3a5c",
+            "material": "matte"
+          },
+          {
+            "id": "shirt",
+            "parent": "speaker",
+            "shape": "box",
+            "size": [
+              0.13,
+              0.36,
+              0.02
+            ],
+            "at": [
+              0,
+              1.06,
+              0.14
+            ],
+            "color": "#eef1f7",
+            "material": "matte"
+          },
+          {
+            "id": "neck",
+            "parent": "speaker",
+            "shape": "cylinder",
+            "size": [
+              0.11,
+              0.08,
+              0.11
+            ],
+            "at": [
+              0,
+              1.43,
+              0
+            ],
+            "color": "#e3b48f",
+            "material": "matte"
+          },
+          {
+            "id": "head",
+            "parent": "speaker",
+            "shape": "sphere",
+            "size": 0.25,
+            "at": [
+              0,
+              1.49,
+              0
+            ],
+            "color": "#e3b48f",
+            "material": "matte"
+          },
+          {
+            "id": "hair",
+            "parent": "speaker",
+            "shape": "sphere",
+            "size": [
+              0.265,
+              0.15,
+              0.265
+            ],
+            "at": [
+              0,
+              1.62,
+              -0.015
+            ],
+            "color": "#3a2a20",
+            "material": "matte"
+          },
+          {
+            "id": "eyeL",
+            "parent": "head",
+            "shape": "sphere",
+            "size": 0.035,
+            "at": [
+              -0.05,
+              0.12,
+              0.11
+            ],
+            "color": "#1a1a1a",
+            "material": "matte"
+          },
+          {
+            "id": "eyeR",
+            "parent": "head",
+            "shape": "sphere",
+            "size": 0.035,
+            "at": [
+              0.05,
+              0.12,
+              0.11
+            ],
+            "color": "#1a1a1a",
+            "material": "matte"
+          },
+          {
+            "id": "armL",
+            "parent": "speaker",
+            "shape": "capsule",
+            "size": [
+              0.12,
+              0.62,
+              0.12
+            ],
+            "at": [
+              -0.31,
+              0.8,
+              0
+            ],
+            "pivot": "top",
+            "stride": -18,
+            "color": "#2d3a5c",
+            "material": "matte"
+          },
+          {
+            "id": "armR",
+            "parent": "speaker",
+            "shape": "capsule",
+            "size": [
+              0.12,
+              0.62,
+              0.12
+            ],
+            "at": [
+              0.31,
+              0.8,
+              0
+            ],
+            "pivot": "top",
+            "stride": 18,
+            "color": "#2d3a5c",
+            "material": "matte"
+          },
+          {
+            "id": "handL",
+            "parent": "armL",
+            "shape": "sphere",
+            "size": 0.11,
+            "at": [
+              0,
+              -0.04,
+              0
+            ],
+            "color": "#e3b48f",
+            "material": "matte"
+          },
+          {
+            "id": "handR",
+            "parent": "armR",
+            "shape": "sphere",
+            "size": 0.11,
+            "at": [
+              0,
+              -0.04,
+              0
+            ],
+            "color": "#e3b48f",
+            "material": "matte"
+          },
+          {
+            "id": "clicker",
+            "parent": "handR",
+            "shape": "box",
+            "size": [
+              0.04,
+              0.03,
+              0.11
+            ],
+            "at": [
+              0,
+              0.02,
+              0.06
+            ],
+            "color": "#111318",
+            "material": "plastic"
+          },
+          {
+            "id": "claude",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 1.35,
+            "at": [
+              2.5,
+              0,
+              -0.9
+            ],
+            "turn": -25,
+            "animation": "Idle",
+            "label": "Claude",
+            "moves": [
+              {
+                "at": "Politely",
+                "animation": "Yes"
+              }
+            ]
+          },
+          {
+            "id": "a1",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              -3.6,
+              0,
+              4.6
+            ],
+            "turn": -6
+          },
+          {
+            "id": "a1b",
+            "parent": "a1",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#3b3f4f",
+            "material": "matte"
+          },
+          {
+            "id": "a1h",
+            "parent": "a1",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#2a2220",
+            "material": "matte"
+          },
+          {
+            "id": "a2",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              -2.2,
+              0,
+              4.6
+            ],
+            "turn": 0
+          },
+          {
+            "id": "a2b",
+            "parent": "a2",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#4a3b3b",
+            "material": "matte"
+          },
+          {
+            "id": "a2h",
+            "parent": "a2",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#4a3020",
+            "material": "matte"
+          },
+          {
+            "id": "a2arm",
+            "parent": "a2",
+            "shape": "capsule",
+            "size": [
+              0.1,
+              0.55,
+              0.1
+            ],
+            "at": [
+              0.25,
+              0.6,
+              0
+            ],
+            "pivot": "top",
+            "color": "#4a3b3b",
+            "material": "matte",
+            "moves": [
+              {
+                "at": "Raise your hand",
+                "wait": 0.3,
+                "turn": [
+                  0,
+                  0,
+                  165
+                ],
+                "seconds": 0.7
+              },
+              {
+                "at": "it did it anyway",
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.8
+              }
+            ]
+          },
+          {
+            "id": "a2hand",
+            "parent": "a2arm",
+            "shape": "sphere",
+            "size": 0.09,
+            "at": [
+              0,
+              -0.03,
+              0
+            ],
+            "color": "#e3b48f",
+            "material": "matte"
+          },
+          {
+            "id": "a3",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              -0.8,
+              0,
+              4.6
+            ],
+            "turn": 6
+          },
+          {
+            "id": "a3b",
+            "parent": "a3",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#2f4040",
+            "material": "matte"
+          },
+          {
+            "id": "a3h",
+            "parent": "a3",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#1c1c1c",
+            "material": "matte"
+          },
+          {
+            "id": "a4",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              0.6,
+              0,
+              4.6
+            ],
+            "turn": -6
+          },
+          {
+            "id": "a4b",
+            "parent": "a4",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#45404f",
+            "material": "matte"
+          },
+          {
+            "id": "a4h",
+            "parent": "a4",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#5a4632",
+            "material": "matte"
+          },
+          {
+            "id": "a4arm",
+            "parent": "a4",
+            "shape": "capsule",
+            "size": [
+              0.1,
+              0.55,
+              0.1
+            ],
+            "at": [
+              0.25,
+              0.6,
+              0
+            ],
+            "pivot": "top",
+            "color": "#45404f",
+            "material": "matte",
+            "moves": [
+              {
+                "at": "Raise your hand",
+                "wait": 0.55,
+                "turn": [
+                  0,
+                  0,
+                  165
+                ],
+                "seconds": 0.7
+              },
+              {
+                "at": "it did it anyway",
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.8
+              }
+            ]
+          },
+          {
+            "id": "a4hand",
+            "parent": "a4arm",
+            "shape": "sphere",
+            "size": 0.09,
+            "at": [
+              0,
+              -0.03,
+              0
+            ],
+            "color": "#e3b48f",
+            "material": "matte"
+          },
+          {
+            "id": "a5",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              2,
+              0,
+              4.6
+            ],
+            "turn": 0
+          },
+          {
+            "id": "a5b",
+            "parent": "a5",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#3a3a2f",
+            "material": "matte"
+          },
+          {
+            "id": "a5h",
+            "parent": "a5",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#2b2b30",
+            "material": "matte"
+          },
+          {
+            "id": "a6",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              3.4,
+              0,
+              4.6
+            ],
+            "turn": 6
+          },
+          {
+            "id": "a6b",
+            "parent": "a6",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#2e3448",
+            "material": "matte"
+          },
+          {
+            "id": "a6h",
+            "parent": "a6",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#2a2220",
+            "material": "matte"
+          },
+          {
+            "id": "a7",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              -2.9,
+              0,
+              5.8
+            ],
+            "turn": -6
+          },
+          {
+            "id": "a7b",
+            "parent": "a7",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#3b3f4f",
+            "material": "matte"
+          },
+          {
+            "id": "a7h",
+            "parent": "a7",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#4a3020",
+            "material": "matte"
+          },
+          {
+            "id": "a8",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              -1.5,
+              0,
+              5.8
+            ],
+            "turn": 0
+          },
+          {
+            "id": "a8b",
+            "parent": "a8",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#4a3b3b",
+            "material": "matte"
+          },
+          {
+            "id": "a8h",
+            "parent": "a8",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#1c1c1c",
+            "material": "matte"
+          },
+          {
+            "id": "a8arm",
+            "parent": "a8",
+            "shape": "capsule",
+            "size": [
+              0.1,
+              0.55,
+              0.1
+            ],
+            "at": [
+              0.25,
+              0.6,
+              0
+            ],
+            "pivot": "top",
+            "color": "#4a3b3b",
+            "material": "matte",
+            "moves": [
+              {
+                "at": "Raise your hand",
+                "wait": 0.8,
+                "turn": [
+                  0,
+                  0,
+                  165
+                ],
+                "seconds": 0.7
+              },
+              {
+                "at": "it did it anyway",
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.8
+              }
+            ]
+          },
+          {
+            "id": "a8hand",
+            "parent": "a8arm",
+            "shape": "sphere",
+            "size": 0.09,
+            "at": [
+              0,
+              -0.03,
+              0
+            ],
+            "color": "#e3b48f",
+            "material": "matte"
+          },
+          {
+            "id": "a9",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              -0.1,
+              0,
+              5.8
+            ],
+            "turn": 6
+          },
+          {
+            "id": "a9b",
+            "parent": "a9",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#2f4040",
+            "material": "matte"
+          },
+          {
+            "id": "a9h",
+            "parent": "a9",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#5a4632",
+            "material": "matte"
+          },
+          {
+            "id": "a10",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              1.3,
+              0,
+              5.8
+            ],
+            "turn": -6
+          },
+          {
+            "id": "a10b",
+            "parent": "a10",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#45404f",
+            "material": "matte"
+          },
+          {
+            "id": "a10h",
+            "parent": "a10",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#2b2b30",
+            "material": "matte"
+          },
+          {
+            "id": "a11",
+            "shape": "group",
+            "size": [
+              0.5,
+              1.35,
+              0.4
+            ],
+            "at": [
+              2.7,
+              0,
+              5.8
+            ],
+            "turn": 0
+          },
+          {
+            "id": "a11b",
+            "parent": "a11",
+            "shape": "capsule",
+            "size": [
+              0.46,
+              0.72,
+              0.32
+            ],
+            "at": [
+              0,
+              0.42,
+              0
+            ],
+            "color": "#3a3a2f",
+            "material": "matte"
+          },
+          {
+            "id": "a11h",
+            "parent": "a11",
+            "shape": "sphere",
+            "size": 0.23,
+            "at": [
+              0,
+              1.06,
+              0
+            ],
+            "color": "#2a2220",
+            "material": "matte"
+          }
+        ],
+        "camera": {
+          "frame": [
+            "screen",
+            "carpet"
+          ],
+          "angle": "front",
+          "distance": "medium"
+        },
+        "shots": [
+          {
+            "at": "it did it anyway",
+            "frame": [
+              "speaker",
+              "claude"
+            ],
+            "angle": "front",
+            "distance": "medium",
+            "seconds": 1.6
+          }
+        ]
+      },
+      "cues": []
+    },
+    {
+      "id": "mostly",
+      "text": "Mostly. Mostly is fine for code style. Mostly is not fine for your AWS credentials.",
+      "holdMs": 250,
+      "scene": {
+        "type": "3d",
+        "with": "open",
+        "objects": [
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "title": "Claude *mostly* follows CLAUDE.md."
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "label": ""
+          },
+          {
+            "id": "key",
+            "shape": "group",
+            "size": [
+              0.3,
+              0.8,
+              0.08
+            ],
+            "at": [
+              1,
+              1,
+              0.7
+            ],
+            "spin": 50,
+            "float": true
+          },
+          {
+            "id": "keyShaft",
+            "parent": "key",
+            "shape": "cylinder",
+            "size": [
+              0.055,
+              0.42,
+              0.055
+            ],
+            "at": [
+              0,
+              0,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "keyTooth1",
+            "parent": "key",
+            "shape": "box",
+            "size": [
+              0.1,
+              0.045,
+              0.03
+            ],
+            "at": [
+              0.06,
+              0.03,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "keyTooth2",
+            "parent": "key",
+            "shape": "box",
+            "size": [
+              0.07,
+              0.045,
+              0.03
+            ],
+            "at": [
+              0.05,
+              0.12,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "keyBow",
+            "parent": "key",
+            "shape": "torus",
+            "size": [
+              0.3,
+              0.3,
+              0.07
+            ],
+            "at": [
+              0,
+              0.4,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "armR",
+            "moves": [
+              {
+                "at": "not fine",
+                "turn": [
+                  -55,
+                  0,
+                  25
+                ],
+                "seconds": 0.6
+              },
+              {
+                "at": "credentials",
+                "wait": 0.6,
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.8
+              }
+            ]
+          }
+        ],
+        "camera": {
+          "frame": "screen",
+          "angle": "front",
+          "distance": "close"
+        },
+        "shots": [
+          {
+            "at": "not fine",
+            "frame": [
+              "speaker",
+              "key"
+            ],
+            "angle": "three-quarter",
+            "distance": "medium",
+            "seconds": 1.4
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "AWS credentials",
+          "show": [
+            "key",
+            "keyShaft",
+            "keyTooth1",
+            "keyTooth2",
+            "keyBow"
+          ]
+        },
+        {
+          "at": "AWS credentials",
+          "blink": "keyBow",
+          "until": "credentials"
+        }
+      ]
+    },
+    {
+      "id": "leash",
+      "text": "So I did what any reasonable engineer would do. I asked the AI to build its own leash. And it said: great idea! I've been thinking about that a lot.",
+      "holdMs": 400,
+      "scene": {
+        "type": "3d",
+        "with": "mostly",
+        "objects": [
+          {
+            "id": "key",
+            "gone": true
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "title": "reasonable engineering"
+              },
+              {
+                "at": "great idea",
+                "title": "MADE BY *CLAUDE.*",
+                "text": "Claude, on the leash it built."
+              }
+            ]
+          },
+          {
+            "id": "speaker",
+            "moves": [
+              {
+                "at": "So I did",
+                "turn": 80,
+                "seconds": 0.5
+              },
+              {
+                "at": "reasonable engineer",
+                "to": [
+                  1,
+                  0,
+                  0.5
+                ],
+                "seconds": 3.2
+              },
+              {
+                "at": "build its own",
+                "turn": 25,
+                "seconds": 0.7
+              },
+              {
+                "at": "thinking about",
+                "turn": 0,
+                "seconds": 0.8
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "at": "great idea",
+                "animation": "ThumbsUp"
+              }
+            ]
+          },
+          {
+            "id": "collar",
+            "parent": "claude",
+            "shape": "torus",
+            "size": [
+              0.42,
+              0.42,
+              0.07
+            ],
+            "at": [
+              0,
+              0.5900000000000001,
+              0
+            ],
+            "turn": [
+              90,
+              0,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link1",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              2.345,
+              0.607,
+              -0.692
+            ],
+            "turn": [
+              0,
+              0,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link2",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              2.275,
+              0.457,
+              -0.617
+            ],
+            "turn": [
+              0,
+              90,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link3",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              2.205,
+              0.323,
+              -0.541
+            ],
+            "turn": [
+              0,
+              0,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link4",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              2.135,
+              0.216,
+              -0.466
+            ],
+            "turn": [
+              0,
+              90,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link5",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              2.065,
+              0.14,
+              -0.39
+            ],
+            "turn": [
+              0,
+              0,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link6",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              1.995,
+              0.098,
+              -0.314
+            ],
+            "turn": [
+              0,
+              90,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link7",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              1.925,
+              0.088,
+              -0.239
+            ],
+            "turn": [
+              0,
+              0,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link8",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              1.855,
+              0.103,
+              -0.163
+            ],
+            "turn": [
+              0,
+              90,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "link9",
+            "shape": "torus",
+            "size": [
+              0.13,
+              0.13,
+              0.03
+            ],
+            "at": [
+              1.785,
+              0.136,
+              -0.088
+            ],
+            "turn": [
+              0,
+              0,
+              0
+            ],
+            "color": "#e2b33c",
+            "material": "metal"
+          },
+          {
+            "id": "peg",
+            "shape": "cylinder",
+            "size": [
+              0.08,
+              0.26,
+              0.08
+            ],
+            "at": [
+              1.75,
+              0,
+              -0.05
+            ],
+            "color": "#c9ccd6",
+            "material": "metal"
+          }
+        ],
+        "camera": {
+          "frame": [
+            "speaker",
+            "claude",
+            "carpet"
+          ],
+          "angle": "three-quarter",
+          "distance": "medium"
+        },
+        "shots": [
+          {
+            "at": "build its own",
+            "frame": [
+              "claude",
+              "peg",
+              "speaker"
+            ],
+            "angle": "three-quarter",
+            "distance": "close",
+            "seconds": 1.5
+          },
+          {
+            "at": "thinking about",
+            "frame": [
+              "screen",
+              "speaker"
+            ],
+            "angle": "front",
+            "distance": "medium",
+            "seconds": 1.6
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "build its own",
+          "show": [
+            "collar",
+            "link1",
+            "link2",
+            "link3",
+            "link4",
+            "link5",
+            "link6",
+            "link7",
+            "link8",
+            "link9",
+            "peg"
+          ],
+          "until": "great idea"
+        }
+      ]
+    },
+    {
+      "id": "framework",
+      "text": "There are three ways to influence an AI. A memory... asks nicely. A hook... says no. And a mod? A mod says no, and gives you a little badge about it.",
+      "holdMs": 300,
+      "scene": {
+        "type": "3d",
+        "with": "leash",
+        "objects": [
+          {
+            "id": "collar",
+            "gone": true
+          },
+          {
+            "id": "link1",
+            "gone": true
+          },
+          {
+            "id": "link2",
+            "gone": true
+          },
+          {
+            "id": "link3",
+            "gone": true
+          },
+          {
+            "id": "link4",
+            "gone": true
+          },
+          {
+            "id": "link5",
+            "gone": true
+          },
+          {
+            "id": "link6",
+            "gone": true
+          },
+          {
+            "id": "link7",
+            "gone": true
+          },
+          {
+            "id": "link8",
+            "gone": true
+          },
+          {
+            "id": "link9",
+            "gone": true
+          },
+          {
+            "id": "peg",
+            "gone": true
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "title": "Three ways to influence an AI"
+              }
+            ]
+          },
+          {
+            "id": "speaker",
+            "moves": [
+              {
+                "at": "three ways",
+                "turn": 60,
+                "seconds": 0.5
+              },
+              {
+                "at": "three ways",
+                "wait": 0.3,
+                "to": [
+                  1.5,
+                  0,
+                  0.5
+                ],
+                "seconds": 1.4
+              },
+              {
+                "at": "A memory",
+                "turn": -25,
+                "seconds": 0.6
+              },
+              {
+                "at": "A mod says",
+                "to": [
+                  1.3,
+                  0,
+                  0.6
+                ],
+                "turn": [
+                  12,
+                  -30,
+                  0
+                ],
+                "seconds": 0.8
+              },
+              {
+                "at": "little badge",
+                "turn": [
+                  0,
+                  -15,
+                  0
+                ],
+                "seconds": 0.8
+              }
+            ]
+          },
+          {
+            "id": "armR",
+            "moves": [
+              {
+                "at": "A memory",
+                "turn": [
+                  0,
+                  0,
+                  -95
+                ],
+                "seconds": 0.6
+              },
+              {
+                "at": "And a mod",
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.6
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "at": "A hook",
+                "wait": 0.9,
+                "animation": "No"
+              }
+            ]
+          },
+          {
+            "id": "memory",
+            "shape": "box",
+            "size": [
+              0.62,
+              0.62,
+              0.05
+            ],
+            "at": [
+              -2.7,
+              0.95,
+              -0.4
+            ],
+            "turn": [
+              0,
+              14,
+              -6
+            ],
+            "color": "#ffd84d",
+            "material": "plastic",
+            "label": "Memory",
+            "float": true
+          },
+          {
+            "id": "hook",
+            "shape": "group",
+            "size": [
+              0.5,
+              0.95,
+              0.12
+            ],
+            "scale": 1.1,
+            "at": [
+              -1.35,
+              0.85,
+              -0.4
+            ],
+            "label": "Hook",
+            "float": true
+          },
+          {
+            "id": "hookCurve",
+            "parent": "hook",
+            "shape": "torus",
+            "size": [
+              0.44,
+              0.44,
+              0.1
+            ],
+            "arc": 200,
+            "turn": [
+              0,
+              0,
+              160
+            ],
+            "at": [
+              0,
+              0,
+              0
+            ],
+            "color": "#c9ccd6",
+            "material": "metal"
+          },
+          {
+            "id": "hookShank",
+            "parent": "hook",
+            "shape": "cylinder",
+            "size": [
+              0.08,
+              0.58,
+              0.08
+            ],
+            "at": [
+              0.17,
+              0.22,
+              0
+            ],
+            "color": "#c9ccd6",
+            "material": "metal"
+          },
+          {
+            "id": "hookEye",
+            "parent": "hook",
+            "shape": "torus",
+            "size": [
+              0.17,
+              0.17,
+              0.05
+            ],
+            "at": [
+              0.17,
+              0.76,
+              0
+            ],
+            "color": "#c9ccd6",
+            "material": "metal"
+          },
+          {
+            "id": "mod",
+            "shape": "group",
+            "size": [
+              0.62,
+              0.9,
+              0.12
+            ],
+            "scale": 1.1,
+            "at": [
+              0.05,
+              0.85,
+              -0.4
+            ],
+            "label": "Mod",
+            "float": true,
+            "moves": [
+              {
+                "at": "little badge",
+                "turn": [
+                  0,
+                  360,
+                  0
+                ],
+                "seconds": 1.4
+              }
+            ]
+          },
+          {
+            "id": "badge",
+            "parent": "mod",
+            "shape": "cylinder",
+            "size": [
+              0.62,
+              0.08,
+              0.62
+            ],
+            "turn": [
+              90,
+              0,
+              0
+            ],
+            "at": [
+              0,
+              0.28,
+              0
+            ],
+            "color": "#f2c14e",
+            "material": "plastic"
+          },
+          {
+            "id": "badgeText",
+            "parent": "mod",
+            "shape": "text",
+            "text": "MOD",
+            "size": 0.17,
+            "at": [
+              0,
+              0.25,
+              0.06
+            ],
+            "color": "#5a3a00",
+            "material": "plastic"
+          },
+          {
+            "id": "ribbonL",
+            "parent": "mod",
+            "shape": "box",
+            "size": [
+              0.15,
+              0.34,
+              0.02
+            ],
+            "at": [
+              -0.11,
+              -0.12,
+              -0.01
+            ],
+            "turn": [
+              0,
+              0,
+              -14
+            ],
+            "color": "#d23c3c",
+            "material": "matte"
+          },
+          {
+            "id": "ribbonR",
+            "parent": "mod",
+            "shape": "box",
+            "size": [
+              0.15,
+              0.34,
+              0.02
+            ],
+            "at": [
+              0.11,
+              -0.12,
+              -0.01
+            ],
+            "turn": [
+              0,
+              0,
+              14
+            ],
+            "color": "#d23c3c",
+            "material": "matte"
+          }
+        ],
+        "camera": {
+          "frame": [
+            "screen",
+            "memory",
+            "hook",
+            "mod",
+            "speaker"
+          ],
+          "angle": "front",
+          "distance": "medium"
+        },
+        "shots": [
+          {
+            "at": "A mod says",
+            "frame": [
+              "mod",
+              "speaker"
+            ],
+            "angle": "three-quarter",
+            "distance": "medium",
+            "seconds": 1.4
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "A memory",
+          "show": [
+            "memory"
+          ]
+        },
+        {
+          "at": "asks nicely",
+          "blink": "memory",
+          "until": "A hook"
+        },
+        {
+          "at": "A hook",
+          "show": [
+            "hook",
+            "hookCurve",
+            "hookShank",
+            "hookEye"
+          ]
+        },
+        {
+          "at": "says no",
+          "point": "hookCurve"
+        },
+        {
+          "at": "And a mod",
+          "show": [
+            "mod",
+            "badge",
+            "badgeText",
+            "ribbonL",
+            "ribbonR"
+          ]
+        },
+        {
+          "at": "little badge",
+          "blink": "badge",
+          "until": "about it"
+        }
+      ]
+    },
+    {
+      "id": "blocked",
+      "text": "Here's Claude trying to read my secrets. Blocked. And honestly? It took the rejection better than most people I know.",
+      "holdMs": 350,
+      "scene": {
+        "type": "3d",
+        "with": "framework",
+        "objects": [
+          {
+            "id": "memory",
+            "gone": true
+          },
+          {
+            "id": "hook",
+            "gone": true
+          },
+          {
+            "id": "mod",
+            "gone": true
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "at": "read my secrets",
+                "layout": "code",
+                "text": "$ cat ~/.aws/credentials"
+              },
+              {
+                "at": "Blocked",
+                "layout": "code",
+                "text": "$ cat ~/.aws/credentials\nhook: secrets stay secret",
+                "stamp": "BLOCKED"
+              }
+            ]
+          },
+          {
+            "id": "speaker",
+            "moves": [
+              {
+                "at": "Here's Claude",
+                "to": [
+                  0.9,
+                  0,
+                  0.6
+                ],
+                "turn": -20,
+                "seconds": 1.2
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "at": "Here's Claude",
+                "turn": -100,
+                "seconds": 0.5
+              },
+              {
+                "at": "Here's Claude",
+                "wait": 0.3,
+                "to": [
+                  -1.2,
+                  0,
+                  -0.6
+                ],
+                "seconds": 2.4,
+                "animation": "Walking"
+              },
+              {
+                "at": "Blocked",
+                "to": [
+                  -0.7,
+                  0,
+                  -0.45
+                ],
+                "seconds": 0.35
+              },
+              {
+                "at": "Blocked",
+                "wait": 0.1,
+                "animation": "No"
+              },
+              {
+                "at": "took the rejection",
+                "turn": -20,
+                "seconds": 0.6
+              },
+              {
+                "at": "better than",
+                "animation": "ThumbsUp"
+              }
+            ]
+          },
+          {
+            "id": "safe",
+            "shape": "box",
+            "size": [
+              0.95,
+              1.05,
+              0.8
+            ],
+            "at": [
+              -2.6,
+              0,
+              -1.2
+            ],
+            "turn": 18,
+            "color": "#8a93a8",
+            "material": "plastic",
+            "label": "~/.aws"
+          },
+          {
+            "id": "dial",
+            "parent": "safe",
+            "shape": "cylinder",
+            "size": [
+              0.24,
+              0.05,
+              0.24
+            ],
+            "turn": [
+              90,
+              0,
+              0
+            ],
+            "at": [
+              0.15,
+              0.48,
+              0.4
+            ],
+            "color": "#c9ccd6",
+            "material": "metal"
+          },
+          {
+            "id": "handle",
+            "parent": "safe",
+            "shape": "box",
+            "size": [
+              0.06,
+              0.28,
+              0.05
+            ],
+            "at": [
+              -0.25,
+              0.4,
+              0.42
+            ],
+            "color": "#c9ccd6",
+            "material": "metal"
+          },
+          {
+            "id": "field",
+            "shape": "torus",
+            "size": [
+              1.9,
+              1.9,
+              0.06
+            ],
+            "turn": [
+              90,
+              0,
+              0
+            ],
+            "at": [
+              -2.6,
+              -0.93,
+              -1.2
+            ],
+            "color": "#ff3b3b",
+            "material": "glow"
+          },
+          {
+            "id": "wall",
+            "shape": "box",
+            "size": [
+              1.7,
+              1.6,
+              0.03
+            ],
+            "at": [
+              -1.75,
+              0,
+              -0.75
+            ],
+            "turn": 78,
+            "color": "#ff3b3b",
+            "material": "glass"
+          }
+        ],
+        "camera": {
+          "frame": [
+            "screen",
+            "safe",
+            "claude",
+            "speaker"
+          ],
+          "angle": "front",
+          "distance": "medium"
+        },
+        "shots": [
+          {
+            "at": "took the rejection",
+            "frame": [
+              "claude",
+              "speaker"
+            ],
+            "angle": "front",
+            "distance": "medium",
+            "seconds": 1.4
+          }
+        ]
+      },
+      "cues": [
+        {
+          "show": [
+            "safe",
+            "dial",
+            "handle"
+          ]
+        },
+        {
+          "at": "Blocked",
+          "show": [
+            "field",
+            "wall"
+          ]
+        },
+        {
+          "at": "Blocked",
+          "blink": "field",
+          "until": "honestly"
+        }
+      ]
+    },
+    {
+      "id": "questions",
+      "text": "There was a time I asked myself, every day: where am I? Which branch? Is my AWS login alive?",
+      "holdMs": 300,
+      "scene": {
+        "type": "3d",
+        "with": "blocked",
+        "spotlight": {
+          "on": "speaker",
+          "angle": 13,
+          "dim": 0.35,
+          "changes": [
+            {
+              "at": "There was a time",
+              "dim": 0.7,
+              "seconds": 1.5
+            }
+          ]
+        },
+        "objects": [
+          {
+            "id": "safe",
+            "gone": true
+          },
+          {
+            "id": "field",
+            "gone": true
+          },
+          {
+            "id": "wall",
+            "gone": true
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "title": "Every day:"
+              }
+            ]
+          },
+          {
+            "id": "speaker",
+            "moves": [
+              {
+                "at": "There was a time",
+                "to": [
+                  0,
+                  0,
+                  0.4
+                ],
+                "turn": 0,
+                "seconds": 1.6
+              }
+            ]
+          },
+          {
+            "id": "armR",
+            "moves": [
+              {
+                "at": "asked myself",
+                "turn": [
+                  -48,
+                  0,
+                  32
+                ],
+                "seconds": 0.9
+              },
+              {
+                "at": "login alive",
+                "wait": 0.7,
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.8
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "at": "There was a time",
+                "turn": 80,
+                "seconds": 0.5
+              },
+              {
+                "at": "There was a time",
+                "wait": 0.4,
+                "to": [
+                  2.5,
+                  0,
+                  -0.9
+                ],
+                "seconds": 2.6,
+                "animation": "Walking"
+              },
+              {
+                "at": "Which branch",
+                "turn": -25,
+                "seconds": 0.6
+              }
+            ]
+          },
+          {
+            "id": "q1",
+            "shape": "text",
+            "text": "?",
+            "size": 0.5,
+            "at": [
+              -0.55,
+              2,
+              0.4
+            ],
+            "turn": 12,
+            "color": "#ffd84d",
+            "material": "glow",
+            "float": true
+          },
+          {
+            "id": "q2",
+            "shape": "text",
+            "text": "?",
+            "size": 0.6,
+            "at": [
+              0,
+              2.25,
+              0.4
+            ],
+            "color": "#ff9f43",
+            "material": "glow",
+            "float": true
+          },
+          {
+            "id": "q3",
+            "shape": "text",
+            "text": "?",
+            "size": 0.5,
+            "at": [
+              0.55,
+              2,
+              0.4
+            ],
+            "turn": -12,
+            "color": "#ff6b6b",
+            "material": "glow",
+            "float": true
+          }
+        ],
+        "camera": {
+          "frame": [
+            "speaker"
+          ],
+          "angle": "front",
+          "distance": "medium"
+        },
+        "shots": [
+          {
+            "at": "where am I",
+            "frame": [
+              "speaker",
+              "q1",
+              "q2",
+              "q3"
+            ],
+            "angle": "front",
+            "distance": "medium",
+            "seconds": 1.2
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "where am I",
+          "show": "q1"
+        },
+        {
+          "at": "Which branch",
+          "show": "q2"
+        },
+        {
+          "at": "AWS login",
+          "show": "q3"
+        }
+      ]
+    },
+    {
+      "id": "band",
+      "text": "Now there's a band above my prompt. Yellow means AWS dies soon. Red means I'm working on a Sunday... and the rest of the world is still asleep.",
+      "holdMs": 400,
+      "scene": {
+        "type": "3d",
+        "with": "questions",
+        "spotlight": {
+          "on": "speaker",
+          "angle": 15,
+          "dim": 0.35
+        },
+        "objects": [
+          {
+            "id": "q1",
+            "moves": [
+              {
+                "at": "Now there's",
+                "scale": 0,
+                "seconds": 0.4
+              }
+            ]
+          },
+          {
+            "id": "q2",
+            "moves": [
+              {
+                "at": "Now there's",
+                "wait": 0.1,
+                "scale": 0,
+                "seconds": 0.4
+              }
+            ]
+          },
+          {
+            "id": "q3",
+            "moves": [
+              {
+                "at": "Now there's",
+                "wait": 0.2,
+                "scale": 0,
+                "seconds": 0.4
+              }
+            ]
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "at": "a band",
+                "layout": "band",
+                "color": "#3fb27f",
+                "title": " main · aws ok · 3 agents",
+                "text": "$ claude"
+              },
+              {
+                "at": "Yellow",
+                "layout": "band",
+                "color": "#f5c542",
+                "title": " main · aws: 12 min left",
+                "text": "$ claude"
+              },
+              {
+                "at": "Red means",
+                "layout": "band",
+                "color": "#e5484d",
+                "title": " SUNDAY · aws expired · world asleep",
+                "text": "$ claude"
+              }
+            ]
+          },
+          {
+            "id": "globe",
+            "shape": "sphere",
+            "size": 0.9,
+            "at": [
+              -2.7,
+              1.4,
+              -1.4
+            ],
+            "color": "#2f6fd1",
+            "material": "plastic",
+            "spin": 40,
+            "float": true
+          },
+          {
+            "id": "land1",
+            "parent": "globe",
+            "shape": "sphere",
+            "size": [
+              0.38,
+              0.3,
+              0.2
+            ],
+            "at": [
+              0.18,
+              0.42,
+              0.33
+            ],
+            "color": "#3fb27f",
+            "material": "matte"
+          },
+          {
+            "id": "land2",
+            "parent": "globe",
+            "shape": "sphere",
+            "size": [
+              0.28,
+              0.36,
+              0.2
+            ],
+            "at": [
+              -0.22,
+              0.2,
+              0.32
+            ],
+            "color": "#3fb27f",
+            "material": "matte"
+          },
+          {
+            "id": "zz",
+            "shape": "text",
+            "text": "Zz",
+            "size": 0.42,
+            "at": [
+              -2.2,
+              2.25,
+              -1.2
+            ],
+            "color": "#9db4ff",
+            "material": "glow",
+            "float": true
+          }
+        ],
+        "camera": {
+          "frame": "screen",
+          "angle": "front",
+          "distance": "close"
+        },
+        "shots": [
+          {
+            "at": "rest of the world",
+            "frame": [
+              "globe",
+              "zz",
+              "speaker"
+            ],
+            "angle": "three-quarter",
+            "distance": "medium",
+            "seconds": 1.4
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "Sunday",
+          "show": [
+            "globe",
+            "land1",
+            "land2"
+          ]
+        },
+        {
+          "at": "still asleep",
+          "show": "zz"
+        }
+      ]
+    },
+    {
+      "id": "slack",
+      "text": "I also taught it to write Slack like me. No em dashes. Ever. We don't do that here.",
+      "holdMs": 400,
+      "scene": {
+        "type": "3d",
+        "with": "band",
+        "objects": [
+          {
+            "id": "q1",
+            "gone": true
+          },
+          {
+            "id": "q2",
+            "gone": true
+          },
+          {
+            "id": "q3",
+            "gone": true
+          },
+          {
+            "id": "globe",
+            "gone": true
+          },
+          {
+            "id": "zz",
+            "gone": true
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "layout": "chat",
+                "title": "#team",
+                "text": "Hi team — just a quick heads-up!"
+              },
+              {
+                "at": "No em dashes",
+                "layout": "chat",
+                "title": "#team",
+                "text": "~Hi team — just a quick heads-up!\nhey, please review #212"
+              }
+            ]
+          },
+          {
+            "id": "dash",
+            "shape": "text",
+            "text": "—",
+            "size": 1.3,
+            "at": [
+              -1.9,
+              1.25,
+              -0.6
+            ],
+            "color": "#ffd84d",
+            "material": "glow",
+            "float": true,
+            "moves": [
+              {
+                "at": "do that here",
+                "turn": [
+                  0,
+                  0,
+                  120
+                ],
+                "scale": 0,
+                "seconds": 0.7
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "at": "Ever",
+                "animation": "No"
+              }
+            ]
+          }
+        ],
+        "camera": {
+          "frame": "screen",
+          "angle": "front",
+          "distance": "close"
+        },
+        "shots": [
+          {
+            "at": "No em dashes",
+            "frame": [
+              "screen",
+              "dash",
+              "speaker"
+            ],
+            "angle": "front",
+            "distance": "medium",
+            "seconds": 1.2
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "No em dashes",
+          "show": "dash"
+        },
+        {
+          "at": "Ever",
+          "blink": "dash",
+          "until": "do that"
+        }
+      ]
+    },
+    {
+      "id": "night",
+      "text": "While I sleep, Claude... dreams. At three a.m. it reviews its own memories and proposes changes. Proposes. Not applies. We have boundaries.",
+      "holdMs": 400,
+      "scene": {
+        "type": "3d",
+        "with": "slack",
+        "spotlight": {
+          "on": "speaker",
+          "angle": 15,
+          "dim": 0.35,
+          "changes": [
+            {
+              "at": "While I sleep",
+              "dim": 0.93,
+              "seconds": 1.6
+            },
+            {
+              "at": "Claude",
+              "on": "claude",
+              "angle": 12,
+              "seconds": 1.4
+            }
+          ]
+        },
+        "objects": [
+          {
+            "id": "dash",
+            "gone": true
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "title": ""
+              },
+              {
+                "at": "three a.m.",
+                "title": "3:00 AM"
+              },
+              {
+                "at": "Proposes. Not",
+                "title": "*Proposes.* Not applies."
+              }
+            ]
+          },
+          {
+            "id": "moon",
+            "shape": "sphere",
+            "size": 0.9,
+            "at": [
+              -3.6,
+              2.4,
+              -2.6
+            ],
+            "color": "#e9eef8",
+            "material": "glow",
+            "moves": [
+              {
+                "at": "While I sleep",
+                "to": [
+                  -3.6,
+                  4.3,
+                  -2.6
+                ],
+                "seconds": 2.5
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "at": "dreams",
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "zzz",
+            "shape": "text",
+            "text": "z z z",
+            "size": 0.26,
+            "at": [
+              2.6,
+              1.35,
+              -0.7
+            ],
+            "color": "#9db4ff",
+            "material": "glow",
+            "float": true
+          },
+          {
+            "id": "dream",
+            "shape": "group",
+            "size": [
+              1.6,
+              0.4,
+              1.6
+            ],
+            "at": [
+              2.5,
+              0.55,
+              -0.9
+            ],
+            "spin": 45
+          },
+          {
+            "id": "card1",
+            "parent": "dream",
+            "shape": "box",
+            "size": [
+              0.34,
+              0.24,
+              0.02
+            ],
+            "at": [
+              0,
+              0,
+              0.85
+            ],
+            "turn": 0,
+            "color": "#f5f0d8",
+            "material": "glow",
+            "float": true
+          },
+          {
+            "id": "card2",
+            "parent": "dream",
+            "shape": "box",
+            "size": [
+              0.34,
+              0.24,
+              0.02
+            ],
+            "at": [
+              0.85,
+              0.1,
+              0
+            ],
+            "turn": 90,
+            "color": "#f5f0d8",
+            "material": "glow",
+            "float": true
+          },
+          {
+            "id": "card3",
+            "parent": "dream",
+            "shape": "box",
+            "size": [
+              0.34,
+              0.24,
+              0.02
+            ],
+            "at": [
+              0,
+              0,
+              -0.85
+            ],
+            "turn": 180,
+            "color": "#f5f0d8",
+            "material": "glow",
+            "float": true
+          },
+          {
+            "id": "card4",
+            "parent": "dream",
+            "shape": "box",
+            "size": [
+              0.34,
+              0.24,
+              0.02
+            ],
+            "at": [
+              -0.85,
+              0.1,
+              0
+            ],
+            "turn": 270,
+            "color": "#f5f0d8",
+            "material": "glow",
+            "float": true
+          }
+        ],
+        "camera": {
+          "frame": [
+            "claude",
+            "moon",
+            "speaker"
+          ],
+          "angle": "front",
+          "distance": "medium"
+        },
+        "shots": [
+          {
+            "at": "reviews its own",
+            "frame": [
+              "claude",
+              "dream"
+            ],
+            "angle": "three-quarter",
+            "distance": "close",
+            "seconds": 1.6
+          },
+          {
+            "at": "Proposes. Not",
+            "frame": [
+              "screen"
+            ],
+            "angle": "front",
+            "distance": "medium",
+            "seconds": 1.4
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "dreams",
+          "show": "zzz"
+        },
+        {
+          "at": "reviews its own",
+          "show": [
+            "dream",
+            "card1",
+            "card2",
+            "card3",
+            "card4"
+          ],
+          "until": "memories"
+        }
+      ]
+    },
+    {
+      "id": "team",
+      "text": "By day, I have a team. Twelve agents, one human, zero standups. I'm a manager now. I didn't apply for it.",
+      "holdMs": 450,
+      "scene": {
+        "type": "3d",
+        "with": "night",
+        "spotlight": {
+          "on": "speaker",
+          "angle": 24,
+          "dim": 0.2
+        },
+        "objects": [
+          {
+            "id": "moon",
+            "gone": true
+          },
+          {
+            "id": "zzz",
+            "gone": true
+          },
+          {
+            "id": "dream",
+            "gone": true
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "title": "By day"
+              },
+              {
+                "at": "Twelve agents",
+                "title": "12 agents · 1 human · *0 standups*"
+              },
+              {
+                "at": "manager now",
+                "title": "Manager",
+                "text": "(did not apply)"
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "animation": "Standing"
+              },
+              {
+                "at": "By day",
+                "wait": 0.6,
+                "turn": -90,
+                "seconds": 0.4
+              },
+              {
+                "at": "have a team",
+                "to": [
+                  1.2,
+                  0,
+                  -0.3
+                ],
+                "seconds": 1.6,
+                "animation": "Walking"
+              },
+              {
+                "at": "Twelve agents",
+                "turn": -10,
+                "seconds": 0.5
+              },
+              {
+                "at": "zero standups",
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "speaker",
+            "moves": [
+              {
+                "at": "manager now",
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.5
+              }
+            ]
+          },
+          {
+            "id": "armL",
+            "moves": [
+              {
+                "at": "one human",
+                "turn": [
+                  0,
+                  0,
+                  -150
+                ],
+                "seconds": 0.6
+              },
+              {
+                "at": "zero standups",
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.6
+              }
+            ]
+          },
+          {
+            "id": "agent1",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              -3.4,
+              0,
+              -1.3
+            ],
+            "turn": 20.4,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent2",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              -2.3,
+              0,
+              -1.3
+            ],
+            "turn": 13.799999999999999,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.08,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent3",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              -1.2,
+              0,
+              -1.3
+            ],
+            "turn": 7.199999999999999,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.16,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent4",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              1.2,
+              0,
+              -1.3
+            ],
+            "turn": -7.199999999999999,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.24,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent5",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              2.3,
+              0,
+              -1.3
+            ],
+            "turn": -13.799999999999999,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.32,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent6",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              3.4,
+              0,
+              -1.3
+            ],
+            "turn": -20.4,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.4,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent7",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              -2.85,
+              0,
+              -2.4
+            ],
+            "turn": 17.1,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent8",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              -1.75,
+              0,
+              -2.4
+            ],
+            "turn": 10.5,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.08,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent9",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              -0.65,
+              0,
+              -2.4
+            ],
+            "turn": 3.9000000000000004,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.16,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent10",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              0.65,
+              0,
+              -2.4
+            ],
+            "turn": -3.9000000000000004,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.24,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent11",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              1.75,
+              0,
+              -2.4
+            ],
+            "turn": -10.5,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.32,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          },
+          {
+            "id": "agent12",
+            "shape": "model",
+            "src": "assets/robot.glb",
+            "size": 0.95,
+            "at": [
+              2.85,
+              0,
+              -2.4
+            ],
+            "turn": -17.1,
+            "animation": "Idle",
+            "moves": [
+              {
+                "at": "zero standups",
+                "wait": 0.4,
+                "animation": "Sitting",
+                "seconds": 30
+              }
+            ]
+          }
+        ],
+        "camera": {
+          "frame": [
+            "carpet",
+            "agent1",
+            "agent2",
+            "agent3",
+            "agent4",
+            "agent5",
+            "agent6",
+            "agent7",
+            "agent8",
+            "agent9",
+            "agent10",
+            "agent11",
+            "agent12"
+          ],
+          "angle": "high",
+          "distance": "medium"
+        },
+        "shots": [
+          {
+            "at": "manager now",
+            "frame": [
+              "screen",
+              "speaker"
+            ],
+            "angle": "front",
+            "distance": "medium",
+            "seconds": 1.5
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "Twelve agents",
+          "show": [
+            "agent1",
+            "agent2",
+            "agent3",
+            "agent4",
+            "agent5",
+            "agent6",
+            "agent7",
+            "agent8",
+            "agent9",
+            "agent10",
+            "agent11",
+            "agent12"
+          ],
+          "until": "one human"
+        }
+      ]
+    },
+    {
+      "id": "challenge",
+      "text": "Here's my challenge to you. Find your most annoying repeat mistake. Tell Claude: make this a hook. Ten minutes now... zero apologies later.",
+      "holdMs": 500,
+      "scene": {
+        "type": "3d",
+        "with": "team",
+        "spotlight": {
+          "on": "speaker",
+          "angle": 20,
+          "dim": 0.3,
+          "changes": [
+            {
+              "at": "my challenge",
+              "angle": 8,
+              "dim": 0.9,
+              "seconds": 1.8
+            }
+          ]
+        },
+        "objects": [
+          {
+            "id": "agent1",
+            "gone": true
+          },
+          {
+            "id": "agent2",
+            "gone": true
+          },
+          {
+            "id": "agent3",
+            "gone": true
+          },
+          {
+            "id": "agent4",
+            "gone": true
+          },
+          {
+            "id": "agent5",
+            "gone": true
+          },
+          {
+            "id": "agent6",
+            "gone": true
+          },
+          {
+            "id": "agent7",
+            "gone": true
+          },
+          {
+            "id": "agent8",
+            "gone": true
+          },
+          {
+            "id": "agent9",
+            "gone": true
+          },
+          {
+            "id": "agent10",
+            "gone": true
+          },
+          {
+            "id": "agent11",
+            "gone": true
+          },
+          {
+            "id": "agent12",
+            "gone": true
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "animation": "Standing"
+              }
+            ]
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "at": "Find your",
+                "title": "Find your most annoying *repeat mistake.*"
+              },
+              {
+                "at": "make this a hook",
+                "layout": "quote",
+                "title": "make this a *hook.*",
+                "text": "you, to Claude"
+              },
+              {
+                "at": "Ten minutes",
+                "title": "10 minutes now.",
+                "text": "*0 apologies later.*"
+              }
+            ]
+          },
+          {
+            "id": "speaker",
+            "moves": [
+              {
+                "at": "my challenge",
+                "to": [
+                  0,
+                  0,
+                  0.5
+                ],
+                "turn": 0,
+                "seconds": 1.2
+              },
+              {
+                "at": "make this a hook",
+                "turn": [
+                  8,
+                  0,
+                  0
+                ],
+                "seconds": 0.5
+              },
+              {
+                "at": "Ten minutes",
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.6
+              }
+            ]
+          },
+          {
+            "id": "armR",
+            "moves": [
+              {
+                "at": "Tell Claude",
+                "turn": [
+                  -70,
+                  0,
+                  10
+                ],
+                "seconds": 0.6
+              },
+              {
+                "at": "Ten minutes",
+                "turn": [
+                  0,
+                  0,
+                  0
+                ],
+                "seconds": 0.7
+              }
+            ]
+          },
+          {
+            "id": "hook",
+            "shape": "group",
+            "size": [
+              0.5,
+              0.95,
+              0.12
+            ],
+            "at": [
+              0.95,
+              1.05,
+              0.9
+            ],
+            "float": true,
+            "spin": 30
+          },
+          {
+            "id": "hookCurve",
+            "parent": "hook",
+            "shape": "torus",
+            "size": [
+              0.44,
+              0.44,
+              0.1
+            ],
+            "arc": 200,
+            "turn": [
+              0,
+              0,
+              160
+            ],
+            "at": [
+              0,
+              0,
+              0
+            ],
+            "color": "#ffd84d",
+            "material": "glow"
+          },
+          {
+            "id": "hookShank",
+            "parent": "hook",
+            "shape": "cylinder",
+            "size": [
+              0.08,
+              0.58,
+              0.08
+            ],
+            "at": [
+              0.17,
+              0.22,
+              0
+            ],
+            "color": "#ffd84d",
+            "material": "glow"
+          },
+          {
+            "id": "hookEye",
+            "parent": "hook",
+            "shape": "torus",
+            "size": [
+              0.17,
+              0.17,
+              0.05
+            ],
+            "at": [
+              0.17,
+              0.76,
+              0
+            ],
+            "color": "#ffd84d",
+            "material": "glow"
+          }
+        ],
+        "camera": {
+          "frame": [
+            "speaker",
+            "carpet"
+          ],
+          "angle": "front",
+          "distance": "medium"
+        },
+        "shots": [
+          {
+            "at": "make this a hook",
+            "frame": [
+              "speaker",
+              "hook"
+            ],
+            "angle": "front",
+            "distance": "close",
+            "seconds": 1.4
+          },
+          {
+            "at": "Ten minutes",
+            "frame": [
+              "screen",
+              "speaker"
+            ],
+            "angle": "front",
+            "distance": "medium",
+            "seconds": 1.6
+          }
+        ]
+      },
+      "cues": [
+        {
+          "at": "make this a hook",
+          "show": [
+            "hook",
+            "hookCurve",
+            "hookShank",
+            "hookEye"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thanks",
+      "text": "Thank you.",
+      "holdMs": 4200,
+      "scene": {
+        "type": "3d",
+        "with": "challenge",
+        "spotlight": {
+          "on": "speaker",
+          "angle": 9,
+          "dim": 0.9,
+          "changes": [
+            {
+              "angle": 18,
+              "dim": 0.35,
+              "seconds": 1.2
+            }
+          ]
+        },
+        "objects": [
+          {
+            "id": "hook",
+            "gone": true
+          },
+          {
+            "id": "clicker",
+            "gone": true
+          },
+          {
+            "id": "screen",
+            "slides": [
+              {
+                "title": "Thank you.",
+                "text": "Starter kit + deck in *#ai-tools*"
+              }
+            ]
+          },
+          {
+            "id": "claude",
+            "moves": [
+              {
+                "at": "Thank you",
+                "animation": "Wave"
+              }
+            ]
+          },
+          {
+            "id": "stool",
+            "shape": "cylinder",
+            "size": [
+              0.32,
+              0.7,
+              0.32
+            ],
+            "at": [
+              -0.75,
+              0,
+              0.55
+            ],
+            "color": "#2a2a33",
+            "material": "matte"
+          },
+          {
+            "id": "clicker2",
+            "shape": "box",
+            "size": [
+              0.04,
+              0.03,
+              0.11
+            ],
+            "at": [
+              -0.75,
+              0.7,
+              0.55
+            ],
+            "color": "#111318",
+            "material": "plastic",
+            "moves": [
+              {
+                "at": "Thank you",
+                "wait": 4.6,
+                "to": [
+                  -0.62,
+                  0.92,
+                  0.75
+                ],
+                "seconds": 0.35
+              }
+            ]
+          },
+          {
+            "id": "speaker",
+            "moves": [
+              {
+                "at": "Thank you",
+                "wait": 0.9,
+                "turn": 90,
+                "seconds": 0.4
+              },
+              {
+                "at": "Thank you",
+                "wait": 1.2,
+                "to": [
+                  5.6,
+                  0,
+                  0.4
+                ],
+                "seconds": 1.7
+              },
+              {
+                "at": "Thank you",
+                "wait": 3,
+                "turn": -90,
+                "seconds": 0.35
+              },
+              {
+                "at": "Thank you",
+                "wait": 3.2,
+                "to": [
+                  -0.35,
+                  0,
+                  0.55
+                ],
+                "seconds": 1.4
+              },
+              {
+                "at": "Thank you",
+                "wait": 4.6,
+                "turn": -25,
+                "seconds": 0.4
+              }
+            ]
+          },
+          {
+            "id": "armR",
+            "moves": [
+              {
+                "at": "Thank you",
+                "wait": 4.4,
+                "turn": [
+                  -75,
+                  0,
+                  18
+                ],
+                "seconds": 0.35
+              }
+            ]
+          },
+          {
+            "id": "a2arm",
+            "moves": [
+              {
+                "at": "Thank you",
+                "wait": 0.1,
+                "turn": [
+                  0,
+                  0,
+                  165
+                ],
+                "seconds": 0.6
+              }
+            ]
+          },
+          {
+            "id": "a4arm",
+            "moves": [
+              {
+                "at": "Thank you",
+                "wait": 0.30000000000000004,
+                "turn": [
+                  0,
+                  0,
+                  165
+                ],
+                "seconds": 0.6
+              }
+            ]
+          },
+          {
+            "id": "a8arm",
+            "moves": [
+              {
+                "at": "Thank you",
+                "wait": 0.7000000000000001,
+                "turn": [
+                  0,
+                  0,
+                  165
+                ],
+                "seconds": 0.6
+              }
+            ]
+          }
+        ],
+        "camera": {
+          "frame": [
+            "screen",
+            "carpet"
+          ],
+          "angle": "front",
+          "distance": "medium"
+        }
+      },
+      "cues": []
+    }
+  ]
+}

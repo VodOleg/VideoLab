@@ -1,0 +1,46 @@
+{
+  "title": "POV: when Claude hits its limits",
+  "format": "9:16",
+  "narrator": false,
+  "theme": {
+    "accent": "#ff7a2f"
+  },
+  "voice": {
+    "elevenlabs": {
+      "voiceId": "RdoeZkPeLyYazmUNiI38",
+      "name": "Angus (Glasgow)",
+      "model": "eleven_v4",
+      "stability": 0.3,
+      "similarityBoost": 0.8,
+      "style": 0.5,
+      "speed": 1.15,
+      "draftSpeed": 0.93
+    }
+  },
+  "beats": [
+    {
+      "id": "ride",
+      "text": "This is a developer living his best life, full throttle, shipping code at a hundred miles an hour. And then... five-hour limit reached. So he gets off and pushes. Ten whole minutes, four whole meters. Then the limit resets, and he's gone.",
+      "scene": {
+        "type": "road",
+        "heading": "POV: when Claude hits its limits",
+        "label": "Claude",
+        "moves": [
+          { "move": "wheelie", "at": "full throttle" },
+          { "move": "stall", "at": "limit reached" },
+          { "move": "push", "at": "gets off" },
+          { "move": "launch", "at": "limit resets" }
+        ],
+        "readouts": [
+          { "id": "time", "value": "10:00", "label": "pushing" },
+          { "id": "distance", "value": "4.0 m", "label": "covered" }
+        ]
+      },
+      "cues": [
+        { "at": "limit reached", "until": "gets off", "alert": { "from": "Claude", "title": "5-hour limit reached", "text": "Resets in 10 minutes" } },
+        { "at": "pushes", "show": ["time", "distance"] },
+        { "at": "limit resets", "alert": { "from": "Claude", "title": "Limit reset", "text": "You're good to go" } }
+      ]
+    }
+  ]
+}

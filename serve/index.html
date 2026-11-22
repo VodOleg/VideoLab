@@ -187,6 +187,10 @@
           const clip = el('video', { controls: '', playsinline: '', preload: 'metadata', src: url(f) + '#t=0.1' });
           const meta = el('div', { class: 'meta' }, `Rendered ${when(f.mtime)}`);
           clip.addEventListener('loadedmetadata', () => meta.prepend(`${clip.duration.toFixed(1)}s · `), { once: true });
+          // render.ts notes the voice: a draft has the free Kokoro stand-in for a paid voice.
+          getJson('/videos/' + f.name.replace('.preview.mp4', '.cut.json')).then(cut => {
+            if (cut?.draft) meta.append(' · draft voice (Kokoro, paced like ', cut.voice.replace(/^Kokoro draft for ([^:]+):.*$/, '$1'), ')');
+          });
           box.append(el('h2', {}, 'New cut'), el('div', { class: 'name' }, f.name.replace('.preview.mp4', '')), meta,
             el('div', { class: 'list' }, el('div', {}, clip)), el('div', { style: 'height: 22px' }));
         }

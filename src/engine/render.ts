@@ -32,10 +32,17 @@ const CLIP_FORMAT = 1;
 
 interface Session { served: Served; browser: Browser; close(): Promise<void> }
 
+/**
+ * Chromium draws WebGL (3D scenes) on the GPU, through Direct3D on Windows, unless VIDEOLAB_GPU=0; without a usable GPU
+ * it falls back to software (SwiftShader), slower. Everything else is still drawn and composited in software (3D views
+ * show their frames as pictures), so 2D frames come out the same to the pixel either way.
+ */
+const GPU_ARGS = process.env.VIDEOLAB_GPU === '0' ? [] : ['--enable-gpu', '--ignore-gpu-blocklist', '--disable-gpu-rasterization', '--disable-gpu-compositing', ...(process.platform === 'win32' ? ['--use-angle=d3d11'] : [])];
+
 async function openSession(): Promise<Session> {
   await bundle();
   const served = await serve();
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ args: GPU_ARGS });
   return { served, browser, close: async () => { await browser.close(); await served.close(); } };
 }
 
@@ -232,6 +239,13 @@ export async function renderScenes(opts: RenderOptions & { output: string; audio
     // Not the video's length: a scene that only moved (an earlier one got longer) keeps its clip.
     const { width, height, fps } = config;
     const base = JSON.stringify({ CLIP_FORMAT, chromium: session.browser.version(), PAGE_CSS, assets, crf: opts.crf ?? 18, jpeg: opts.jpegQuality ?? 90, width, height, fps });
+    // What draws WebGL (which GPU, or software) can change 3D pixels slightly: it's part of the key of scenes with 3D
+    // in them (ThreeView names the bundle in their frames).
+    const webgl = await first.page.evaluate(() => {
+      const gl = document.createElement('canvas').getContext('webgl2');
+      const info = gl?.getExtension('WEBGL_debug_renderer_info');
+      return gl ? String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER)) : 'none';
+    });
     const fileHashes = new Map<string, string>();
     const contentOf = async (url: string) => {
       if (!fileHashes.has(url)) {
@@ -249,6 +263,7 @@ export async function renderScenes(opts: RenderOptions & { output: string; audio
       const used = run.files.filter(([, runs]) => runs.some(([a, b]) => a < to && b >= from)).map(([url]) => url).sort();
       const key = createHash('sha1').update(base).update(JSON.stringify(run.fingerprints.slice(from, to)));
       for (const url of used) key.update(`${url}=${await contentOf(url)}`);
+      if (used.includes('/bundle/index.js')) key.update(`webgl=${webgl}`);
       const file = path.join(opts.dir, `${key.digest('hex').slice(0, 20)}.mp4`);
       const rendered = !existsSync(file) || opts.force === 'all' || !!opts.force?.includes(cut.id);
       if (rendered) {

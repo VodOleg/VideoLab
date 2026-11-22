@@ -78,7 +78,8 @@ async function main() {
   const script = JSON.parse(await readFile(path.join('projects', name, 'script.json'), 'utf8')) as Script;
   const beatIds = opt >= 0 ? args[opt + 1].split(',') : script.beats.slice(0, 2).map(b => b.id);
   const beats = beatIds.map(id => script.beats.find(b => b.id === id) ?? (() => { throw new Error(`no beat "${id}" in ${name}`); })());
-  const speed = script.voice?.speed ?? NARRATOR.speed;
+  const voice = script.voice && 'elevenlabs' in script.voice ? undefined : script.voice;
+  const speed = voice?.speed ?? NARRATOR.speed;
 
   await rm(OUT_DIR, { recursive: true, force: true });
   await mkdir(OUT_DIR, { recursive: true });

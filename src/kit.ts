@@ -41,6 +41,8 @@ async function main() {
 
   const video = `${name}.mp4`;
   await access(path.resolve('out', video)).catch(() => { throw new Error(`out/${video} missing: run npm run render -- ${name} first`); });
+  const cut = JSON.parse(await readFile(path.resolve('out', `${name}.cut.json`), 'utf8').catch(() => '{}')) as { draft?: boolean };
+  if (cut.draft) throw new Error(`out/${video} has the draft voice: run npm run voice -- ${name} --final, then npm run render -- ${name}`);
 
   const cover = `${name}.cover.jpg`;
   const frame = Math.round((kit.cover?.at ?? 1) * FPS);
