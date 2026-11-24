@@ -52,6 +52,7 @@ export const Video: React.FC<VideoProps> = ({ project, script, timeline, levels,
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const character = script.narrator === 'cab' ? 'cab' : script.narrator === false ? null : 'ball';
+  const baseImage = typeof script.narrator === 'object' ? script.narrator.image : undefined;
   const narrator = character !== null;
   const captions = script.captions ?? height > width;
   const theme = { ...DEFAULT_THEME, ...script.theme };
@@ -114,7 +115,8 @@ export const Video: React.FC<VideoProps> = ({ project, script, timeline, levels,
       {/* Blinks restart each scene, so a scene that only moved in time looks the same (and keeps its rendered clip). */}
       {character && (() => {
         const Character = character === 'cab' ? Cab : Narrator;
-        return <Character pose={pose} R={plan.size.R} mouth={mouth} blink={blinkAt(frame - (scene?.startFrame ?? 0), fps, scene?.beat.id)} />;
+        const image = baseImage && (plan.looks.findLast(l => frame >= l.frame)?.image ?? baseImage);
+        return <Character pose={pose} R={plan.size.R} mouth={mouth} blink={blinkAt(frame - (scene?.startFrame ?? 0), fps, scene?.beat.id)} image={image && staticFile(`${project}/${image}`)} />;
       })()}
       {captions && <Captions timeline={timeline} />}
 

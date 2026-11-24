@@ -286,7 +286,8 @@ export function planVideo(script: Script, timeline: Timeline, fps: number, stage
     s.hops = Math.max(1, Math.round(d / (4 * size.R)));
   }
 
-  return { beats, stops, size };
+  const looks = resolved.flatMap(r => r.cues.filter(c => c.narrator).map(c => ({ frame: c.frame, image: c.narrator! })));
+  return { beats, stops, size, looks };
 }
 
 export interface NarratorPose {

@@ -1,7 +1,7 @@
 // The narrator: a round character drawn in SVG and posed by narratorAt (plan.ts): it hops, squashes as it lands, points
 // with a stick, looks at what it points at, blinks, and opens its mouth with the voiceover's loudness.
 import type React from 'react';
-import { random, useVideoConfig } from '../engine/index.ts';
+import { Img, random, useVideoConfig } from '../engine/index.ts';
 import type { NarratorPose } from './plan.ts';
 
 const BODY = '#ffb238', LIGHT = '#ffe08a', SHADE = '#f08a24', INK = '#2a1e3a';
@@ -20,8 +20,8 @@ export function blinkAt(frame: number, fps: number, seed = '') {
   }
 }
 
-/** `mouth`: how open, 0-1 (the voice's loudness right now). */
-export const Narrator: React.FC<{ pose: NarratorPose; R: number; mouth: number; blink: number }> = ({ pose, R, mouth, blink }) => {
+/** `mouth`: how open, 0-1 (the voice's loudness right now). `image`: a picture for the body instead of the round face. */
+export const Narrator: React.FC<{ pose: NarratorPose; R: number; mouth: number; blink: number; image?: string }> = ({ pose, R, mouth, blink, image }) => {
   const { width, height } = useVideoConfig();
   const { x, y, ground, sx, sy, aim, ext, look } = pose;
   const lift = ground - y;
@@ -46,7 +46,17 @@ export const Narrator: React.FC<{ pose: NarratorPose; R: number; mouth: number; 
     </g>
   );
 
+  const mouthG = (
+    <g transform={`translate(0 ${0.3 * R})`}>
+      <clipPath id="narrator-mouth"><path d={mouthPath} /></clipPath>
+      <path d={mouthPath} fill={MOUTH} stroke={INK} strokeWidth={0.06 * R} strokeLinejoin="round" />
+      {mouth > 0.15 && <ellipse cx={0} cy={0.05 * R + 1.7 * mh} rx={0.55 * mw} ry={0.6 * mh} fill={TONGUE} clipPath="url(#narrator-mouth)" />}
+    </g>
+  );
+  const squash = `scale(${sx * talk}, ${sy * talk})`;
+
   return (
+    <>
     <svg width={width} height={height} style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}>
       <defs>
         <radialGradient id="narrator-body" cx="0.38" cy="0.3" r="0.8">
@@ -64,20 +74,23 @@ export const Narrator: React.FC<{ pose: NarratorPose; R: number; mouth: number; 
         </g>
       )}
       {/* Squash and stretch from the bottom of the body, so it stays on the ground. */}
-      <g transform={`translate(${x} ${y + R}) scale(${sx * talk} ${sy * talk}) translate(0 ${-R})`}>
+      {!image && <g transform={`translate(${x} ${y + R}) scale(${sx * talk} ${sy * talk}) translate(0 ${-R})`}>
         <circle r={R} fill="url(#narrator-body)" stroke={INK} strokeWidth={0.07 * R} />
         <ellipse cx={-0.58 * R} cy={0.2 * R} rx={0.14 * R} ry={0.08 * R} fill={TONGUE} opacity={0.35} />
         <ellipse cx={0.58 * R} cy={0.2 * R} rx={0.14 * R} ry={0.08 * R} fill={TONGUE} opacity={0.35} />
         {eye(-1)}
         {eye(1)}
-        <g transform={`translate(0 ${0.3 * R})`}>
-          <clipPath id="narrator-mouth"><path d={mouthPath} /></clipPath>
-          <path d={mouthPath} fill={MOUTH} stroke={INK} strokeWidth={0.06 * R} strokeLinejoin="round" />
-          {mouth > 0.15 && <ellipse cx={0} cy={0.05 * R + 1.7 * mh} rx={0.55 * mw} ry={0.6 * mh} fill={TONGUE} clipPath="url(#narrator-mouth)" />}
-        </g>
-      </g>
+        {mouthG}
+      </g>}
       {stick && <circle cx={stick.base.x} cy={stick.base.y} r={0.17 * R} fill={BODY} stroke={INK} strokeWidth={0.06 * R} />}
     </svg>
+    {image && (
+      <div style={{ position: 'absolute', left: x - 1.2 * R, top: y - 1.4 * R, width: 2.4 * R, height: 2.4 * R, transformOrigin: '50% 100%', transform: squash }}>
+        <Img src={image} style={{ width: '100%', height: '100%', display: 'block' }} />
+        <svg viewBox={`${-1.2 * R} ${-1.2 * R} ${2.4 * R} ${2.4 * R}`} style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>{mouthG}</svg>
+      </div>
+    )}
+    </>
   );
 };
 
@@ -88,7 +101,7 @@ const CAB = { body: '#0b0b0d', shine: '#2a2a30', outline: '#f4f4f6', chrome: '#c
  * glows while it talks. It drives where narratorAt hops (a small bounce and a lean instead of jumps), and points by
  * shining a headlight beam at the target. Its wheels sit where the round narrator's bottom would be.
  */
-export const Cab: React.FC<{ pose: NarratorPose; R: number; mouth: number; blink: number }> = ({ pose, R, mouth, blink }) => {
+export const Cab: React.FC<{ pose: NarratorPose; R: number; mouth: number; blink: number; image?: string }> = ({ pose, R, mouth, blink }) => {
   const { width, height } = useVideoConfig();
   const { x, y, ground, aim, ext, look } = pose;
   const lift = ground - y;

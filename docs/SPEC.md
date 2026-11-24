@@ -328,6 +328,8 @@ A round orange character drawn in SVG (`src/video/Narrator.tsx`), planned in `sr
   2-5 s (restarting each scene), and moves its mouth with the voice's loudness (`build/levels.json`, one value per
   frame, written by `npm run render`).
 - `"narrator": false` hides it; cues still light elements up.
+- `"narrator": {"image": "assets/me.svg"}` draws that picture as its body (same hops, stick and a small talking mouth); a cue
+  `"narrator": "assets/other.svg"` switches the picture from its `at` on.
 
 ## 7. Voice
 
