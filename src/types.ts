@@ -238,6 +238,8 @@ export interface Cue {
    * heading), and back up at `until` (default 3 s later, or when the next one comes).
    */
   alert?: { from?: string; title: string; text?: string };
+  /** With an image narrator: its picture from here on (a file in the project folder). */
+  narrator?: string;
 }
 
 /** A beat: a few sentences of voiceover spoken over one scene. Each beat is a scene of the finished video. */
@@ -291,9 +293,10 @@ export interface Script {
   format?: Format;
   /**
    * The narrator character, who goes to what's being said and points at it: true (default) is a round figure that hops
-   * and points with a stick; "cab" is a black cab that drives over and points with its headlight beam; false is none.
+   * and points with a stick; "cab" is a black cab that drives over and points with its headlight beam; false is none;
+   * `{ image }`: the round figure's hop and stick with a picture from the project folder for a body, and a small mouth.
    */
-  narrator?: boolean | 'cab';
+  narrator?: boolean | 'cab' | { image: string };
   /** Word-by-word captions burned in; default true for 9:16, false otherwise. */
   captions?: boolean;
   /** Colours over the default dark theme. */
